@@ -1,0 +1,56 @@
+package com.api.ecom.paycard.entities;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "brands")
+public class Brand {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private String name;
+  private String pic;
+  private Boolean active;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getPic() {
+    return pic;
+  }
+
+  public void setPic(String pic) {
+    this.pic = pic;
+  }
+
+  public Boolean getActive() {
+    return active;
+  }
+
+  public void setActive(Boolean active) {
+    this.active = active;
+  }
+
+  @Override
+  public String toString() {
+    return "Brand [id=" + id + ", name=" + name + ", pic=" + pic + ", active=" + active + "]";
+  }
+
+}
