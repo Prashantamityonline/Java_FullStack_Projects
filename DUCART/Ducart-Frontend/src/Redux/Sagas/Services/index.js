@@ -61,6 +61,7 @@ export async function deleteRecord(collection, payload) {
         headers: {
             "content-type": "application/json"
         }
+         
     })
     return await response.json()
 }

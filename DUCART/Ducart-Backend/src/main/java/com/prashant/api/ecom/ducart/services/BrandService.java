@@ -1,5 +1,6 @@
 package com.prashant.api.ecom.ducart.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -69,9 +70,28 @@ public class BrandService {
     return brandRepo.save(brand);
   }
 
-  // delete brand by id
-  public void deleteBrandById(Long id) {
-    Brand brand = brandRepo.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
-    brandRepo.delete(brand);
+  // // delete brand by id
+  // public void deleteBrandById(Long id) {
+  // Brand brand = brandRepo.findById(id).orElseThrow(() -> new
+  // RuntimeException("Brand not found"));
+  // brandRepo.delete(brand);
+  // }
+  // delete brand
+  public void deleteBrand(Long id) {
+    Brand brand = brandRepo.findById(id).orElseThrow(() -> new RuntimeException("Brand not found for id:" + id));
+    if (brand.getPic() != null) {
+      deleteFile(brand.getPic());
+    }
+    brandRepo.deleteById(id);
+  }
+
+  // Helper method to delete a file by its path
+  private void deleteFile(String filePath) {
+    try {
+      Path path = Paths.get(uploadDir, new File(filePath).getName());
+      Files.deleteIfExists(path);
+    } catch (IOException e) {
+      System.err.println("Error deleting file: " + filePath + " - " + e.getMessage());
+    }
   }
 }

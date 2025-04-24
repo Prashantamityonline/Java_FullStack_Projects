@@ -71,7 +71,7 @@ public class MaincategoryController {
   // Delete MainCategory by ID
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteMaincategoryById(@PathVariable Long id) {
-    maincategoryService.deleteMaincategoryById(id);
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    maincategoryService.deleteMaincategory(id);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

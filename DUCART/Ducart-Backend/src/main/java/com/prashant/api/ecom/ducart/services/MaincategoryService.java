@@ -1,5 +1,6 @@
 package com.prashant.api.ecom.ducart.services;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,15 +27,14 @@ public class MaincategoryService {
 
      // Create Maincategory
      public Maincategory createMaincategory(MaincategoryDTO maincategoryDTO, MultipartFile file) throws IOException {
-          Maincategory maincategory = new Maincategory();
-          BeanUtils.copyProperties(maincategoryDTO, maincategory);
-
           // File upload Logic
           if (file != null && !file.isEmpty()) {
                String relativePath = saveFile(file);
                maincategoryDTO.setPic(relativePath);
-
           }
+          Maincategory maincategory = new Maincategory();
+          BeanUtils.copyProperties(maincategoryDTO, maincategory);
+
           return maincategoryRepo.save(maincategory);
 
      }
@@ -68,7 +68,7 @@ public class MaincategoryService {
           maincategoryDTO.setPic(maincategoryDTO.getPic());
           maincategoryDTO.setActive(maincategoryDTO.isActive());
           if (existingMaincategory != null) {
-               BeanUtils.copyProperties(maincategoryDTO, existingMaincategory, "id");
+               BeanUtils.copyProperties(maincategoryDTO, existingMaincategory);
                return maincategoryRepo.save(existingMaincategory);
           } else {
                throw new RuntimeException("Maincategory not found");
@@ -76,9 +76,24 @@ public class MaincategoryService {
 
      }
 
-     // delete maincategory by id
-     public void deleteMaincategoryById(Long id) {
+     // delete Maincategory
+     public void deleteMaincategory(Long id) {
+          Maincategory maincategory = maincategoryRepo.findById(id)
+                    .orElseThrow(() -> new RuntimeException("maincategory not found for id:" + id));
+          if (maincategory.getPic() != null) {
+               deleteFile(maincategory.getPic());
+          }
           maincategoryRepo.deleteById(id);
+     }
+
+     // Helper method to delete a file by its path
+     private void deleteFile(String filePath) {
+          try {
+               Path path = Paths.get(uploadDir, new File(filePath).getName());
+               Files.deleteIfExists(path);
+          } catch (IOException e) {
+               System.err.println("Error deleting file: " + filePath + " - " + e.getMessage());
+          }
      }
 
 }

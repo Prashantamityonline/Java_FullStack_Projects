@@ -33,7 +33,6 @@ export default function AdminUpdateMaincategory() {
 
   function getInputData(e) {
     let name = e.target.name;
-    // let value = e.target.files ? "/maincategory/" + e.target.files[0].name : e.target.value
     let value = e.target.files ? e.target.files[0] : e.target.value;
     if (name !== "active") {
       setErrorMessage((old) => {
@@ -94,7 +93,7 @@ export default function AdminUpdateMaincategory() {
   }
   useEffect(() => {
     dispatch(getMaincategory());
-  }, [dispatch]);
+  }, []);
   useEffect(() => {
     console.log("Redux Data:", MaincategoryStateData);
     let category = MaincategoryStateData.find((x) => x.id === Number(id));

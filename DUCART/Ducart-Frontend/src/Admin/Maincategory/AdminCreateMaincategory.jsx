@@ -32,7 +32,6 @@ export default function AdminCreateMaincategory() {
 
   function getInputData(e) {
     let name = e.target.name;
-    // let value = e.target.files ? "/maincategory/" + e.target.files[0].name : e.target.value
     let value = e.target.files ? e.target.files[0] : e.target.value;
     if (name !== "active") {
       setErrorMessage((old) => {
@@ -66,18 +65,6 @@ export default function AdminCreateMaincategory() {
           };
         });
       } else {
-        // //this line is used in both dumy server and real server if form has no file field
-        // dispatch(createMaincategory({ ...data }))
-
-        //but in case of real server and if form has file field
-        // var formData = new FormData()
-        // formData.append("name",data.name)
-        // formData.append("pic",data.pic)
-        // formData.append("active",data.active)
-        // dispatch(createMaincategory(formData))
-
-        // navigate("/admin/maincategory")
-
         var formData = new FormData();
         formData.append(
           "data",

@@ -25,14 +25,13 @@ public class SubcategoryService {
 
   // Create Subcategory
   public Subcategory createSubcategory(SubcategoryDTO subcategoryDTO, MultipartFile file) throws IOException {
-    Subcategory subcategory = new Subcategory();
-    BeanUtils.copyProperties(subcategoryDTO, subcategory);
-
     // File upload Logic
     if (file != null && !file.isEmpty()) {
       String relativePath = saveFile(file);
-      subcategory.setPic(relativePath);
+      subcategoryDTO.setPic(relativePath);
     }
+    Subcategory subcategory = new Subcategory();
+    BeanUtils.copyProperties(subcategoryDTO, subcategory);
     return subcategoryRepo.save(subcategory);
   }
 

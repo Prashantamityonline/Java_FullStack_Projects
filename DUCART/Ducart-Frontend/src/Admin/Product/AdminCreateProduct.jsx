@@ -13,10 +13,22 @@ import { getMaincategory } from "../../Redux/ActionCreators/MaincategoryActionCr
 import { getSubcategory } from "../../Redux/ActionCreators/SubcategoryActionCreators";
 import { getBrand } from "../../Redux/ActionCreators/BrandActionCreators";
 
-var rte;
+let rte;
+
 export default function AdminCreateProduct() {
-  let refdiv = useRef(null);
-  let [data, setData] = useState({
+  const refdiv = useRef(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const MaincategoryStateData = useSelector(
+    (state) => state.MaincategoryStateData
+  );
+  const SubcategoryStateData = useSelector(
+    (state) => state.SubcategoryStateData
+  );
+  const BrandStateData = useSelector((state) => state.BrandStateData);
+
+  const [data, setData] = useState({
     name: "",
     maincategory: "",
     subcategory: "",
@@ -32,146 +44,76 @@ export default function AdminCreateProduct() {
     active: true,
     pic: [],
   });
-  let [errorMessage, setErrorMessage] = useState({
-    name: "Name Field is Mendatory",
-    color: "Color Field is Mendatory",
-    size: "Size Field is Mendatory",
-    basePrice: "Base Price Field is Mendatory",
-    discount: "Discount Field is Mendatory",
-    stockQuantity: "Stock Quantity Field is Mendatory",
-    pic: "Pic Field is Mendatory",
+
+  const [errorMessage, setErrorMessage] = useState({
+    name: "Name Field is Mandatory",
+    color: "Color Field is Mandatory",
+    size: "Size Field is Mandatory",
+    basePrice: "Base Price Field is Mandatory",
+    discount: "Discount Field is Mandatory",
+    stockQuantity: "Stock Quantity Field is Mandatory",
+    pic: "Pic Field is Mandatory",
   });
-  let [show, setShow] = useState(false);
-  let navigate = useNavigate();
 
-  let dispatch = useDispatch();
+  const [show, setShow] = useState(false);
 
-  let MaincategoryStateData = useSelector(
-    (state) => state.MaincategoryStateData
-  );
-  let SubcategoryStateData = useSelector((state) => state.SubcategoryStateData);
-  let BrandStateData = useSelector((state) => state.BrandStateData);
+  const getInputData = (e) => {
+    const { name, type, value, files } = e.target;
+    const newValue = type === "file" ? files : value;
 
-  function getInputData(e) {
-    let name = e.target.name;
-
-    let value = e.target.files ? e.target.files : e.target.value;
     if (name !== "active") {
-      setErrorMessage((old) => {
-        return {
-          ...old,
-          [name]: e.target.files ? imageValidators(e) : formValidators(e),
-        };
-      });
+      setErrorMessage((prev) => ({
+        ...prev,
+        [name]: type === "file" ? imageValidators(e) : formValidators(e),
+      }));
     }
-    setData((old) => {
-      return {
-        ...old,
-        [name]:
-          name === "active" || name === "stock"
-            ? value === "1"
-              ? true
-              : false
-            : value,
-      };
-    });
-  }
-  function postData(e) {
+
+    setData((prev) => ({
+      ...prev,
+      [name]: name === "active" || name === "stock" ? value === "1" : newValue,
+    }));
+  };
+
+  const postData = (e) => {
     e.preventDefault();
-    let error = Object.values(errorMessage).find((x) => x !== "");
-    if (error) setShow(true);
-    else {
-      // //this line is used in both dumy server and real server if form has no file field
-      // let stockQuantity = parseInt(data.stockQuantity);
-      // let bp = parseInt(data.basePrice);
-      // let discount = parseInt(data.discount);
-      // let fp = parseInt(bp - (bp * discount) / 100);
-      // dispatch(
-      //   createProduct({
-      //     ...data,
-      //     maincategory:
-      //       data.maincategory !== ""
-      //         ? data.maincategory
-      //         : MaincategoryStateData[0].name,
-      //     subcategory:
-      //       data.subcategory !== ""
-      //         ? data.subcategory
-      //         : SubcategoryStateData[0].name,
-      //     brand: data.brand !== "" ? data.brand : BrandStateData[0].name,
-      //     basePrice: bp,
-      //     discount: discount,
-      //     finalPrice: fp,
-      //     stockQuantity: stockQuantity,
-      //     description: rte.getHTMLCode(),
-      //   })
-      // );
 
-      //but in case of real server and if form has file field
-      let stockQuantity = parseInt(data.stockQuantity);
-      let bp = parseInt(data.basePrice);
-      let discount = parseInt(data.discount);
-      let fp = parseInt(bp - (bp * discount) / 100);
-      // var formData = new FormData();
-      // formData.append("name", data.name);
-      // formData.append(
-      //   "maincategory",
-      //   data.maincategory !== ""
-      //     ? data.maincategory
-      //     : MaincategoryStateData[0].name
-      // );
-      // formData.append(
-      //   "subcategory",
-      //   data.subcategory !== ""
-      //     ? data.subcategory
-      //     : SubcategoryStateData[0].name
-      // );
-      // formData.append(
-      //   "brand",
-      //   data.brand !== "" ? data.brand : BrandStateData[0].name
-      // );
-      // formData.append("color", data.name);
-      // formData.append("size", data.name);
-      // formData.append("basePrice", bp);
-      // formData.append("discount", discount);
-      // formData.append("finalPrice", fp);
-      // formData.append("stock", data.stock);
-      // formData.append("stockQuantity", stockQuantity);
-      // formData.append("description", rte.getHTMLCode());
-      // formData.append("pic", data.pic);
-      // formData.append("active", data.active);
-      var formData = new FormData();
-      formData.append(
-        "data",
-        new Blob(
-          [
-            JSON.stringify({
-              name: data.name,
-              maincategory: data.maincategory,
-              subcategory: data.subcategory,
-              brand: data.brand,
-              color: data.color,
-              size: data.size,
-              basePrice: bp,
-              discount: discount,
-              finalPrice: fp,
-              stock: data.stock,
-              stockQuantity: stockQuantity,
-              description: rte.getHTMLCode(),
-              active: data.active,
-            }),
-          ],
-          { type: "application/json" }
-        )
-      );
-      if (data.pic instanceof File) {
-        formData.append("pic", data.pic);
-      }
+    const hasError = Object.values(errorMessage).some((x) => x !== "");
+    if (hasError) return setShow(true);
 
-      dispatch(createMultipartRecord(formData));
+    const bp = parseInt(data.basePrice);
+    const discount = parseInt(data.discount);
+    const stockQty = parseInt(data.stockQuantity);
+    const fp = bp - (bp * discount) / 100;
 
-      navigate("/admin/product");
+    const payload = {
+      name: data.name,
+      maincategory: data.maincategory,
+      subcategory: data.subcategory,
+      brand: data.brand,
+      color: data.color,
+      size: data.size,
+      basePrice: bp,
+      discount,
+      finalPrice: fp,
+      stock: data.stock,
+      stockQuantity: stockQty,
+      description: rte.getHTMLCode(),
+      active: data.active,
+    };
+
+    const formData = new FormData();
+    formData.append(
+      "data",
+      new Blob([JSON.stringify(payload)], { type: "application/json" })
+    );
+
+    if (data.pic instanceof FileList || Array.isArray(data.pic)) {
+      [...data.pic].forEach((file) => formData.append("pic", file));
     }
-  }
+
+    dispatch(createMultipartRecord(formData));
+    navigate("/admin/product");
+  };
 
   useEffect(() => {
     rte = new window.RichTextEditor(refdiv.current);
@@ -179,21 +121,15 @@ export default function AdminCreateProduct() {
   }, []);
 
   useEffect(() => {
-    (() => {
-      dispatch(getMaincategory());
-    })();
-  }, [MaincategoryStateData.length, dispatch]);
+    dispatch(getMaincategory());
+  }, [MaincategoryStateData, dispatch]);
 
   useEffect(() => {
-    (() => {
-      dispatch(getSubcategory());
-    })();
-  }, [SubcategoryStateData.length, dispatch]);
+    dispatch(getSubcategory());
+  }, [SubcategoryStateData, dispatch]);
 
   useEffect(() => {
-    (() => {
-      dispatch(getBrand());
-    })();
+    dispatch(getBrand());
   }, [BrandStateData, dispatch]);
   return (
     <>
