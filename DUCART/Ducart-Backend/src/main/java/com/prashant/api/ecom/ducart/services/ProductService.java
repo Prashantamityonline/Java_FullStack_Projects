@@ -2,6 +2,9 @@ package com.prashant.api.ecom.ducart.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -55,7 +58,8 @@ public class ProductService {
       productDTO.setPic(relativePath);
     }
     // find existing Product by id and update its properties
-    Product existProduct = productRepo.findById(id).orElseThrow(() -> new RuntimeException("Product is not found"));
+    Product existProduct = productRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Product not found by Id :" + id));
     productDTO.setName(productDTO.getName());
     productDTO.setMaincategory(productDTO.getMaincategory());
     productDTO.setSubcategory(productDTO.getSubcategory());
@@ -81,7 +85,22 @@ public class ProductService {
 
   // Delete Product
   public void deleteProduct(Long id) {
+    Product product = productRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Product is not found By Id:" + id));
+    if (product != null) {
+      deleteFile(product.getPic());
+    }
     productRepo.deleteById(id);
+  }
+
+  // Helper Method file delete
+  private void deleteFile(String filePath) {
+    try {
+      Path path = Paths.get(uploadDir, new File(filePath).getName());
+      Files.deleteIfExists(path);
+    } catch (Exception e) {
+      System.err.println("Error deleting file:" + filePath + "-" + e.getMessage());
+    }
   }
 
 }

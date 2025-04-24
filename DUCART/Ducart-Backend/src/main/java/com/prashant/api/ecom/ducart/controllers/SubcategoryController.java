@@ -30,13 +30,12 @@ public class SubcategoryController {
 
   // create subcategory
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Subcategory> createSubcategory(@RequestPart("data") String jsonData,
-      SubcategoryDTO subcategoryDTO,
+  public ResponseEntity<Subcategory> createSubcategory(@RequestPart("data") String jsonData, // JSON as a String
       @RequestPart("pic") MultipartFile file) {
     try {
       // Convert JSON string to SubcategoryDTO object
       ObjectMapper mapper = new ObjectMapper();
-      subcategoryDTO = mapper.readValue(jsonData, SubcategoryDTO.class);
+      SubcategoryDTO subcategoryDTO = mapper.readValue(jsonData, SubcategoryDTO.class);
       Subcategory subcategory = subcategoryService.createSubcategory(subcategoryDTO, file);
       return ResponseEntity.status(HttpStatus.CREATED).body(subcategory);
     } catch (IOException e) {
@@ -73,6 +72,6 @@ public class SubcategoryController {
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteSubcategoryById(@PathVariable Long id) {
     subcategoryService.deleteSubcategoryById(id);
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

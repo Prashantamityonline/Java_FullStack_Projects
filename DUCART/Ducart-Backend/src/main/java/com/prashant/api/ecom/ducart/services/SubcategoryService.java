@@ -2,6 +2,9 @@ package com.prashant.api.ecom.ducart.services;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -73,6 +76,21 @@ public class SubcategoryService {
 
   // Delete subcategory by ID
   public void deleteSubcategoryById(Long id) {
+    Subcategory subcategory = subcategoryRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Subcategory not found by id:" + id));
+    if (subcategory.getPic() != null) {
+      deleteFile(subcategory.getPic());
+    }
     subcategoryRepo.deleteById(id);
+  }
+
+  // Helper method to delete a file by its path
+  private void deleteFile(String filePath) {
+    try {
+      Path path = Paths.get(uploadDir, new File(filePath).getName());
+      Files.deleteIfExists(path);
+    } catch (IOException e) {
+      System.err.println("Error deleting file: " + filePath + " - " + e.getMessage());
+    }
   }
 }
