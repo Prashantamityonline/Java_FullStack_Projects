@@ -1,28 +1,33 @@
-import { CREATE_BRAND, DELETE_BRAND, GET_BRAND, UPDATE_BRAND } from "../Constants"
+import {
+  CREATE_BRAND,
+  DELETE_BRAND,
+  GET_BRAND,
+  UPDATE_BRAND,
+} from "../Constants";
 
-export function createBrand(data) {
-    return {
-        type: CREATE_BRAND,
-        payload: data
-    }
+export function createMutipartRecord(formData) {
+  return {
+    type: CREATE_BRAND,
+    payload: formData,
+  };
 }
 
 export function getBrand() {
-    return {
-        type: GET_BRAND
-    }
+  return {
+    type: GET_BRAND,
+  };
 }
 
-export function updateBrand(data) {
-    return {
-        type: UPDATE_BRAND,
-        payload: data
-    }
+export function updateMultipartRecord(formData) {
+  return {
+    type: UPDATE_BRAND,
+    payload: formData,
+  };
 }
 
 export function deleteBrand(data) {
-    return {
-        type: DELETE_BRAND,
-        payload: data
-    }
+  return {
+    type: DELETE_BRAND,
+    payload: data,
+  };
 }

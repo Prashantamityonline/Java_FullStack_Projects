@@ -1,7 +1,9 @@
 package com.prashant.api.ecom.ducart.controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +34,10 @@ public class ProductController {
   // create product
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<Product> createProduct(@RequestPart("data") String JsonData,
-      @RequestPart("pic") MultipartFile file) throws IOException {
+      @RequestPart("pic") MultipartFile[] files) throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     ProductDTO productDTO = mapper.readValue(JsonData, ProductDTO.class);
-    Product product = productService.createProduct(productDTO, file);
+    Product product = productService.createProduct(productDTO, files);
     return ResponseEntity.status(HttpStatus.CREATED).body(product);
 
   }
@@ -59,8 +61,10 @@ public class ProductController {
   }
 
   // Delete Product
-  public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, String>> deleteById(@PathVariable Long id) {
     productService.deleteProduct(id);
-    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    Map<String, String> response = new HashMap<>();
+    response.put("message", "Product deleted successfully");
+    return ResponseEntity.ok(response);
   }
 }

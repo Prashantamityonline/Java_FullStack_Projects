@@ -106,7 +106,9 @@ export default function AdminCreateProduct() {
       "data",
       new Blob([JSON.stringify(payload)], { type: "application/json" })
     );
-
+    if (data.pic instanceof FileList || Array.isArray(data.pic)) {
+      [...data.pic].forEach((file) => formData.append("pic", file));
+    }
     if (data.pic instanceof FileList || Array.isArray(data.pic)) {
       [...data.pic].forEach((file) => formData.append("pic", file));
     }
@@ -365,6 +367,19 @@ export default function AdminCreateProduct() {
                       ))
                     )
                   ) : null}
+                  {Array.isArray(data.pic) &&
+                    data.pic.map(
+                      (file, index) =>
+                        file instanceof File && (
+                          <img
+                            key={index}
+                            src={URL.createObjectURL(file)}
+                            alt={`Preview ${index}`}
+                            className="img-thumbnail me-2"
+                            style={{ maxWidth: "100px", maxHeight: "100px" }}
+                          />
+                        )
+                    )}
                 </div>
               </div>
 

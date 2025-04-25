@@ -75,7 +75,7 @@ export default function AdminUpdateMaincategory() {
         const formData = new FormData();
 
         // Add form fields
-        formData.append("id", id); // id bhi include kar diya
+        formData.append("id", id);
         formData.append(
           "data",
           JSON.stringify({ name: data.name, active: data.active })
@@ -164,6 +164,20 @@ export default function AdminUpdateMaincategory() {
                       {errorMessage.pic}
                     </p>
                   ) : null}
+                  {data.pic && (
+                    <div className="mt-2">
+                      <img
+                        src={
+                          data.pic instanceof File
+                            ? URL.createObjectURL(data.pic)
+                            : `http://http://localhost:8080/${data.pic}`
+                        }
+                        alt="Preview"
+                        className="img-thumbnail"
+                        style={{ maxWidth: "150px", maxHeight: "150px" }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-6 mb-3">

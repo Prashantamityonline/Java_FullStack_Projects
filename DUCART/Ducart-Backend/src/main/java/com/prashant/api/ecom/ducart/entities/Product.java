@@ -1,5 +1,7 @@
 package com.prashant.api.ecom.ducart.entities;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,7 +30,7 @@ public class Product {
   private boolean stock;
   private String description;
   private String stockQuantity;
-  private String pic;
+  private List<String> images;
   private boolean active;
 
 }

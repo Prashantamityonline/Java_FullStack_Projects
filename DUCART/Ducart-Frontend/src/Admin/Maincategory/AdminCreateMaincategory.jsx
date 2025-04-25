@@ -150,6 +150,16 @@ export default function AdminCreateMaincategory() {
                       {errorMessage.pic}
                     </p>
                   ) : null}
+                  {data.pic && (
+                    <div className="mt-2">
+                      <img
+                        src={URL.createObjectURL(data.pic)}
+                        alt="Preview"
+                        className="img-thumbnail"
+                        style={{ maxWidth: "150px", maxHeight: "150px" }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-6 mb-3">

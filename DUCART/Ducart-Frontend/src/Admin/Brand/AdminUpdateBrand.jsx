@@ -9,7 +9,7 @@ import formValidators from "../../Components/Validators/formValidators";
 import imageValidators from "../../Components/Validators/imageValidators";
 
 import {
-  updateBrand,
+  updateMultipartRecord,
   getBrand,
 } from "../../Redux/ActionCreators/BrandActionCreators";
 export default function AdminUpdateBrand() {
@@ -68,12 +68,20 @@ export default function AdminUpdateBrand() {
       } else {
         //but in case of real server and if form has file field
         var formData = new FormData();
-        formData.append("id", data.id); //use id or _id according to your database
-        formData.append("name", data.name);
-        formData.append("pic", data.pic);
-        formData.append("active", data.active);
-        dispatch(updateBrand(formData));
+        formData.append("id", id); //use id
+        var formData = new FormData();
+        formData.append(
+          "data",
+          JSON.stringify({
+            name: data.name,
+            active: data.active,
+          })
+        );
 
+        if (data.pic instanceof File) {
+          formData.append("pic", data.pic);
+        }
+        dispatch(updateMultipartRecord(formData));
         navigate("/admin/brand");
       }
     }
@@ -83,9 +91,9 @@ export default function AdminUpdateBrand() {
     (() => {
       dispatch(getBrand());
       if (BrandStateData.length)
-        setData(BrandStateData.find((x) => x.id === id));
+        setData(BrandStateData.find((x) => x.id === Number(id)));
     })();
-  }, [BrandStateData.length]);
+  }, [id, BrandStateData.length]);
   return (
     <>
       <HeroSection title="Admin" />
@@ -143,6 +151,20 @@ export default function AdminUpdateBrand() {
                       {errorMessage.pic}
                     </p>
                   ) : null}
+                  {data.pic && (
+                    <div className="mt-2">
+                      <img
+                        src={
+                          data.pic instanceof File
+                            ? URL.createObjectURL(data.pic)
+                            : `http://localhost:8080/uploads/brands/${data.pic}`
+                        }
+                        alt="Preview"
+                        className="img-thumbnail"
+                        style={{ maxWidth: "150px", maxHeight: "150px" }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-6 mb-3">

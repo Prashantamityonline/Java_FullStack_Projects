@@ -1,7 +1,9 @@
 package com.prashant.api.ecom.ducart.controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,7 @@ public class SubcategoryController {
 
   // Update subcategory by ID
   @PutMapping("/{id}")
-  public ResponseEntity<Subcategory> updateSubcategoryById(@PathVariable Long id,
+  public ResponseEntity<Map<String, Object>> updateSubcategoryById(@PathVariable Long id,
       @RequestPart("data") String jsonData,
       @RequestPart("pic") MultipartFile file) {
     try {
@@ -62,16 +64,26 @@ public class SubcategoryController {
 
       // Update subcategory
       Subcategory updatedSubcategory = subcategoryService.updateSubcategoryById(id, subcategoryDTO, file);
-      return ResponseEntity.status(HttpStatus.OK).body(updatedSubcategory);
+      // Create custom JSON response
+      Map<String, Object> response = new HashMap<>();
+      response.put("message", "Subcategory updated successfully");
+      response.put("data", updatedSubcategory);
+
+      return ResponseEntity.ok(response); // 200 + body
     } catch (IOException e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+      Map<String, Object> error = new HashMap<>();
+      error.put("error", "Failed to parse data or update category");
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
   }
 
   // Delete subcategory by ID
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteSubcategoryById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, String>> deleteSubcategoryById(@PathVariable Long id) {
     subcategoryService.deleteSubcategoryById(id);
-    return ResponseEntity.status(HttpStatus.OK).build();
+    Map<String, String> response = new HashMap<>();
+    response.put("message", "Subcategory deleted successfully");
+    return ResponseEntity.ok(response);
+
   }
 }

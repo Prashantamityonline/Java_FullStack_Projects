@@ -1,7 +1,9 @@
 package com.prashant.api.ecom.ducart.controllers;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.beans.BeanUtils;
@@ -64,8 +66,10 @@ public class BrandController {
 
   // delete brand by id
   @DeleteMapping("/{id}")
-  public ResponseEntity<Void> deleteBrandById(@PathVariable Long id) {
+  public ResponseEntity<Map<String, String>> deleteBrandById(@PathVariable Long id) {
     brandService.deleteBrand(id);
-    return ResponseEntity.noContent().build();
+    Map<String, String> response = new HashMap<>();
+    response.put("message", "Brand deleted successfully");
+    return ResponseEntity.ok(response);
   }
 }

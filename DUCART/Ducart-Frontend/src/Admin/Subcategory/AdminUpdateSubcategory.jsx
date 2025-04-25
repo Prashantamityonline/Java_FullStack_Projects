@@ -68,7 +68,7 @@ export default function AdminUpdateSubcategory() {
       } else {
         //but in case of real server and if form has file field
         var formData = new FormData();
-        formData.append("id", data.id); //use id or _id according to your database
+        formData.append("id", id); //use id or _id according to your database
         formData.append(
           "data",
           JSON.stringify({ name: data.name, active: data.active })
@@ -86,7 +86,7 @@ export default function AdminUpdateSubcategory() {
   // First useEffect: Redux se data fetch karne ke liye
   useEffect(() => {
     dispatch(getSubcategory());
-  }, [dispatch]);
+  }, []);
 
   // Second useEffect: Data set karne ke liye jab redux data ya id change ho
   useEffect(() => {
@@ -98,7 +98,7 @@ export default function AdminUpdateSubcategory() {
         active: category.active,
       });
     }
-  }, [id, SubcategoryStateData, dispatch]);
+  }, [id, SubcategoryStateData]);
 
   return (
     <>

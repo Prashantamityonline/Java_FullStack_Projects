@@ -65,9 +65,22 @@ export default function AdminCreateSubcategory() {
       } else {
         //but in case of real server and if form has file field
         var formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("pic", data.pic);
-        formData.append("active", data.active);
+        formData.append(
+          "data",
+          new Blob(
+            [
+              JSON.stringify({
+                name: data.name,
+                active: data.active,
+              }),
+            ],
+            { type: "application/json" }
+          )
+        );
+
+        if (data.pic instanceof File) {
+          formData.append("pic", data.pic);
+        }
         dispatch(createMultipartRecord(formData));
 
         navigate("/admin/subcategory");
@@ -136,6 +149,16 @@ export default function AdminCreateSubcategory() {
                       {errorMessage.pic}
                     </p>
                   ) : null}
+                  {data.pic && (
+                    <div className="mt-2">
+                      <img
+                        src={URL.createObjectURL(data.pic)}
+                        alt="Preview"
+                        className="img-thumbnail"
+                        style={{ maxWidth: "150px", maxHeight: "150px" }}
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div className="col-md-6 mb-3">
