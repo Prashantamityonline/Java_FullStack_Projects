@@ -19,7 +19,7 @@ public class Newsletter {
   // newsletter subscription
 
   @PostMapping
-  public ResponseEntity<?> saveNewsletter(@RequestBody NewsletterDTO newsletterDTO) {
+  public ResponseEntity<String> saveNewsletter(@RequestBody NewsletterDTO newsletterDTO) {
     try {
       newsletterService.saveNewsletter(newsletterDTO);
       return ResponseEntity.ok("Subscribed successfully");
