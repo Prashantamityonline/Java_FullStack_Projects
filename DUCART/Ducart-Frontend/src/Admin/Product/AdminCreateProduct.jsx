@@ -58,59 +58,79 @@ export default function AdminCreateProduct() {
   const [show, setShow] = useState(false);
 
   const getInputData = (e) => {
-    const { name, type, value, files } = e.target;
-    const newValue = type === "file" ? files : value;
-
+    let name = e.target.name;
+    let value = e.target.files ? e.target.files : e.target.value;
     if (name !== "active") {
       setErrorMessage((prev) => ({
         ...prev,
-        [name]: type === "file" ? imageValidators(e) : formValidators(e),
+        [name]: e.target.files ? imageValidators(e) : formValidators(e),
       }));
     }
 
     setData((prev) => ({
       ...prev,
-      [name]: name === "active" || name === "stock" ? value === "1" : newValue,
+      [name]:
+        name === "active" || name === "stock"
+          ? value === "1"
+            ? true
+            : false
+          : value,
     }));
   };
 
   const postData = (e) => {
     e.preventDefault();
 
-    const hasError = Object.values(errorMessage).some((x) => x !== "");
+    const hasError = Object.values(errorMessage).find((x) => x !== "");
     if (hasError) return setShow(true);
 
-    const bp = parseInt(data.basePrice);
-    const discount = parseInt(data.discount);
-    const stockQty = parseInt(data.stockQuantity);
-    const fp = bp - (bp * discount) / 100;
+    var formData = new FormData();
+    // Ensure data is available before accessing index 0
+    const maincategory =
+      data.maincategory !== ""
+        ? data.maincategory
+        : MaincategoryStateData?.[0]?.name || "";
 
-    const payload = {
-      name: data.name,
-      maincategory: data.maincategory,
-      subcategory: data.subcategory,
-      brand: data.brand,
-      color: data.color,
-      size: data.size,
-      basePrice: bp,
-      discount,
-      finalPrice: fp,
-      stock: data.stock,
-      stockQuantity: stockQty,
-      description: rte.getHTMLCode(),
-      active: data.active,
-    };
+    const subcategory =
+      data.subcategory !== ""
+        ? data.subcategory
+        : SubcategoryStateData?.[0]?.name || "";
 
-    const formData = new FormData();
+    const brand =
+      data.brand !== "" ? data.brand : BrandStateData?.[0]?.name || "";
+
+    const bp = data.basePrice || 0;
+    const discount = data.discount || 0;
+    const fp = data.finalPrice || bp - (bp * discount) / 100;
+    const stockQuantity = data.stockQuantity || 0;
+
     formData.append(
       "data",
-      new Blob([JSON.stringify(payload)], { type: "application/json" })
+      new Blob(
+        [
+          JSON.stringify({
+            name: data.name,
+            maincategory: maincategory,
+            subcategory: subcategory,
+            brand: brand,
+            color: data.color,
+            size: data.size,
+            basePrice: bp,
+            discount: discount,
+            finalPrice: fp,
+            stock: data.stock,
+            stockQuantity: stockQuantity,
+            description: rte.getHTMLCode(),
+            active: data.active,
+          }),
+        ],
+        { type: "application/json" }
+      )
     );
-    if (data.pic instanceof FileList || Array.isArray(data.pic)) {
-      [...data.pic].forEach((file) => formData.append("pic", file));
-    }
-    if (data.pic instanceof FileList || Array.isArray(data.pic)) {
-      [...data.pic].forEach((file) => formData.append("pic", file));
+
+    // Handle images
+    if (data.pic instanceof File) {
+      formData.append("pic", data.pic);
     }
 
     dispatch(createMultipartRecord(formData));

@@ -1,7 +1,6 @@
 package com.prashant.api.ecom.ducart.entities;
 
-import java.util.List;
-
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,6 +8,8 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -24,13 +25,17 @@ public class Product {
   private String brand;
   private String color;
   private String size;
-  private String basePrice;
-  private String discount;
-  private String finalPrice;
+
+  private Double basePrice;
+  private Double discount;
+  private Double finalPrice;
+
   private boolean stock;
   private String description;
-  private String stockQuantity;
-  private List<String> images;
-  private boolean active;
+  private Integer stockQuantity;
 
+  @ElementCollection
+  private List<String> pic;
+
+  private boolean active;
 }

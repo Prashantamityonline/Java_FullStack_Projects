@@ -2,12 +2,16 @@ package com.prashant.api.ecom.ducart.modal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-public class ProductDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+public class ProductDTO { // For input data
   @NotBlank(message = "Product name is required")
   private String name;
 
@@ -27,26 +31,24 @@ public class ProductDTO {
   private String size;
 
   @NotBlank(message = "base price is required")
-  private String basePrice;
+  private Double basePrice;
 
   @NotBlank(message = "discount is required")
-  private String discount;
+  private Double discount;
 
   @NotBlank(message = "final price is required")
-  private String finalPrice;
+  private Double finalPrice;
 
-  @NotNull(message = "stock active status is required")
   private boolean stock;
 
   @NotBlank(message = "description is required")
   private String description;
 
   @NotBlank(message = "stock quantity is required")
-  private String stockQuantity;
+  private Integer stockQuantity;
 
   @NotNull(message = "Product images are required")
-  private List<String> images;
+  private List<String> pic;
 
-  @NotNull(message = "product active status is required")
   private boolean active;
 }

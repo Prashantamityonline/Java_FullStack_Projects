@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prashant.api.ecom.ducart.entities.Product;
 import com.prashant.api.ecom.ducart.modal.ProductDTO;
+import com.prashant.api.ecom.ducart.modal.ProductResponseDTO;
 import com.prashant.api.ecom.ducart.services.ProductService;
 
 @RestController
@@ -33,13 +34,25 @@ public class ProductController {
 
   // create product
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Product> createProduct(@RequestPart("data") String JsonData,
-      @RequestPart("pic") MultipartFile[] files) throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    ProductDTO productDTO = mapper.readValue(JsonData, ProductDTO.class);
-    Product product = productService.createProduct(productDTO, files);
-    return ResponseEntity.status(HttpStatus.CREATED).body(product);
+  public ResponseEntity<ProductResponseDTO> createProduct(
+      @RequestPart("data") String jsonData,
+      @RequestPart(value = "pic", required = false) MultipartFile[] files) throws IOException {
 
+    ObjectMapper mapper = new ObjectMapper();
+    ProductDTO productDTO = mapper.readValue(jsonData, ProductDTO.class);
+
+    Product product = productService.createProduct(productDTO, files);
+
+    ProductResponseDTO responseDTO = mapToResponseDTO(product);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
+  }
+
+  // Helper method to map Product to ProductResponseDTO
+  private ProductResponseDTO mapToResponseDTO(Product product) {
+    ProductResponseDTO responseDTO = new ProductResponseDTO();
+    BeanUtils.copyProperties(product, responseDTO);
+    return responseDTO;
   }
 
   // GetAll Product

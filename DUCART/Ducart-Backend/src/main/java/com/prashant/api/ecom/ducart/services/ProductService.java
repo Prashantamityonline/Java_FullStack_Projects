@@ -26,47 +26,38 @@ public class ProductService {
   // file upload
   String uploadDir = FileUploadUtil.getUploadDirFor("prodcuts");
 
-  // // create product with image
-  // public Product createProduct(ProductDTO productDTO, MultipartFile files)
-  // throws IOException {
-  // // image upload logic
-  // if (files != null && !files.isEmpty()) {
-  // String relativePath = saveFile(files);
-  // productDTO.setPic(relativePath);
-  // }
-  // Product product = new Product();
-  // BeanUtils.copyProperties(productDTO, product);
-  // return productRepo.save(product);
-  // }
-  // create product with multiple images
+  // create Product
   public Product createProduct(ProductDTO productDTO, MultipartFile[] files) throws IOException {
-
-    List<String> imagePaths = new ArrayList<>();
-
-    if (files != null && files.length > 0) {
-      for (MultipartFile file : files) {
-        if (!file.isEmpty()) {
-          String relativePath = saveFile(file);
-          imagePaths.add(relativePath);
-        }
-      }
-    }
-
-    // 👇 You should update your ProductDTO and Product entity to handle multiple
-    // image paths
-    productDTO.setImages(imagePaths); // make sure you have a field called `List<String> images` in DTO
-
+    List<String> relativePaths = saveFile(files);
+    productDTO.setPic(relativePaths);
     Product product = new Product();
     BeanUtils.copyProperties(productDTO, product);
+
     return productRepo.save(product);
   }
 
-  // save file logic
-  private String saveFile(MultipartFile file) throws IOException {
-    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-    String filePath = uploadDir + fileName;
-    file.transferTo(new File(filePath));
-    return "/uploads/products/" + fileName;
+  // Save multiple files logic
+  private List<String> saveFile(MultipartFile[] files) throws IOException {
+    List<String> filePaths = new ArrayList<>();
+    if (files != null && files.length > 0) {
+      for (MultipartFile file : files) {
+        if (file != null && !file.isEmpty()) {
+          // Generate a unique file name
+          String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+          Path filePath = Paths.get(uploadDir, fileName);
+
+          // Create parent directory if it doesn't exist
+          Files.createDirectories(filePath.getParent());
+
+          // Save the file
+          Files.write(filePath, file.getBytes());
+
+          // Add the relative path to the list
+          filePaths.add("/uploads/products/" + fileName);
+        }
+      }
+    }
+    return filePaths;
   }
 
   // Get All Products
@@ -76,11 +67,6 @@ public class ProductService {
 
   // Update Product
   public Product updateProductById(Long id, ProductDTO productDTO, MultipartFile file) throws IOException {
-    // image upload logic
-    if (file != null && !file.isEmpty()) {
-      String relativePath = saveFile(file);
-      productDTO.setImages(List.of(relativePath));
-    }
     // find existing Product by id and update its properties
     Product existProduct = productRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Product not found by Id :" + id));
@@ -96,7 +82,7 @@ public class ProductService {
     productDTO.setStock(productDTO.isStock());
     productDTO.setDescription(productDTO.getDescription());
     productDTO.setStockQuantity(productDTO.getStockQuantity());
-    productDTO.setImages(productDTO.getImages());
+    productDTO.setPic(productDTO.getPic());
     productDTO.setActive(productDTO.isActive());
 
     if (existProduct != null) {
@@ -112,9 +98,9 @@ public class ProductService {
     Product product = productRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Product is not found By Id:" + id));
     if (product != null) {
-      if (product.getImages() != null) {
-        for (String imagePath : product.getImages()) {
-          deleteFile(imagePath);
+      if (product.getPic() != null) {
+        for (String filePath : product.getPic()) {
+          deleteFile(filePath);
         }
       }
     }
