@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.MediaType;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prashant.api.ecom.ducart.entities.Brand;
 import com.prashant.api.ecom.ducart.modal.BrandDTO;
+import com.prashant.api.ecom.ducart.modal.BrandResponseDTO;
 import com.prashant.api.ecom.ducart.services.BrandService;
 
 @RestController
@@ -32,36 +31,32 @@ public class BrandController {
 
   // create brand with image
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Brand> createBrand(@RequestPart("data") String jsonData, // JSON data as a string
+  public ResponseEntity<BrandResponseDTO> createBrand(@RequestPart("data") String jsonData, // JSON data as a string
       @RequestPart("pic") MultipartFile file) throws IOException {
     // Convert JSON string to BrandDTO object
     ObjectMapper mapper = new ObjectMapper();
     BrandDTO brandDTO = mapper.readValue(jsonData, BrandDTO.class);
-    Brand brand = brandService.createBrand(brandDTO, file);
-    return ResponseEntity.status(HttpStatus.CREATED).body(brand);
+    // call service layer
+    BrandResponseDTO brandResponseDTO = brandService.createBrand(brandDTO, file);
+    return ResponseEntity.status(HttpStatus.CREATED).body(brandResponseDTO);
   }
 
   // get all brands
   @GetMapping
-  public ResponseEntity<List<Brand>> getAllBrands() {
-    List<Brand> brands = brandService.getAllBrands();
-    return ResponseEntity.ok(brands);
+  public ResponseEntity<List<BrandResponseDTO>> getAllBrands() {
+    return ResponseEntity.status(HttpStatus.OK).body(brandService.getAllBrands());
   }
 
   // update brand by id
   @PutMapping("/{id}")
-  public ResponseEntity<Brand> updateBrandById(@PathVariable Long id, @RequestPart("data") String jsonData,
+  public ResponseEntity<BrandResponseDTO> updateBrandById(@PathVariable Long id, @RequestPart("data") String jsonData,
       @RequestPart("pic") MultipartFile file) throws IOException {
     // Convert JSON string to BrandDTO object
     ObjectMapper mapper = new ObjectMapper();
     BrandDTO brandDTO = mapper.readValue(jsonData, BrandDTO.class);
-
-    // Update the brand with the new data
-    Brand existingBrand = brandService.updateBrandById(id, brandDTO, file);
-
-    BeanUtils.copyProperties(brandDTO, existingBrand, "id");
-
-    return ResponseEntity.ok(existingBrand);
+    // call service layer
+    BrandResponseDTO brandResponseDTO = brandService.updateBrandById(id, brandDTO, file);
+    return ResponseEntity.status(HttpStatus.OK).body(brandResponseDTO);
   }
 
   // delete brand by id

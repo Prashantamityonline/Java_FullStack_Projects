@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prashant.api.ecom.ducart.entities.Product;
 import com.prashant.api.ecom.ducart.modal.ProductDTO;
+import com.prashant.api.ecom.ducart.modal.ProductResponseDTO;
 import com.prashant.api.ecom.ducart.repositories.ProductRepo;
 import com.prashant.api.ecom.ducart.utils.FileUploadUtil;
 
@@ -27,13 +29,28 @@ public class ProductService {
   String uploadDir = FileUploadUtil.getUploadDirFor("prodcuts");
 
   // create Product
-  public Product createProduct(ProductDTO productDTO, MultipartFile[] files) throws IOException {
+  public ProductResponseDTO createProduct(ProductDTO productDTO, MultipartFile[] files) throws IOException {
+    // save file logic
     List<String> relativePaths = saveFile(files);
     productDTO.setPic(relativePaths);
+    // Convert ProductDTO to Product entity
     Product product = new Product();
     BeanUtils.copyProperties(productDTO, product);
 
-    return productRepo.save(product);
+    // save entity to database
+    Product saveProduct = productRepo.save(product);
+
+    // Convert Product entity to ProductResponseDTO
+    ProductResponseDTO productResponseDTO = mapToResponseDTO(saveProduct);
+
+    return productResponseDTO;
+  }
+
+  // Helper method to map Product to ProductResponseDTO
+  private ProductResponseDTO mapToResponseDTO(Product product) {
+    ProductResponseDTO responseDTO = new ProductResponseDTO();
+    BeanUtils.copyProperties(product, responseDTO);
+    return responseDTO;
   }
 
   // Save multiple files logic
@@ -61,12 +78,27 @@ public class ProductService {
   }
 
   // Get All Products
-  public List<Product> getAllProducts() {
-    return productRepo.findAll();
+  public List<ProductResponseDTO> getAllProducts() {
+    List<Product> products = productRepo.findAll();
+    // Convert List<Product> to List<ProductResponseDTO>
+    List<ProductResponseDTO> productResponseDTOs = products.stream()
+        .map(this::mapToResponseDTO)
+        .collect(Collectors.toList());
+    return productResponseDTOs;
+  }
+
+  // Get Product by Id
+  public ProductResponseDTO getProductById(Long id) {
+    Product product = new Product();
+    productRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Product not found by Id :" + id));
+    ProductResponseDTO productResponseDTO = new ProductResponseDTO();
+    BeanUtils.copyProperties(product, productResponseDTO);
+    return productResponseDTO;
   }
 
   // Update Product
-  public Product updateProductById(Long id, ProductDTO productDTO, MultipartFile file) throws IOException {
+  public ProductResponseDTO updateProductById(Long id, ProductDTO productDTO, MultipartFile file) throws IOException {
     // find existing Product by id and update its properties
     Product existProduct = productRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Product not found by Id :" + id));
@@ -87,7 +119,13 @@ public class ProductService {
 
     if (existProduct != null) {
       BeanUtils.copyProperties(productDTO, existProduct);
-      return productRepo.save(existProduct);
+      // save entity to database
+      Product saveProduct = productRepo.save(existProduct);
+
+      // Convert product entity to ProductResponseDTO
+      ProductResponseDTO productResponseDTO = mapToResponseDTO(saveProduct);
+
+      return productResponseDTO;
     } else {
       throw new RuntimeException("Product is not found");
     }

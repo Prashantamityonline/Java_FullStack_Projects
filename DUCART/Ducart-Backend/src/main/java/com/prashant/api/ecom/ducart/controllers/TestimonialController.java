@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prashant.api.ecom.ducart.entities.Testimonial;
 import com.prashant.api.ecom.ducart.modal.TestimonialDTO;
+import com.prashant.api.ecom.ducart.modal.TestimonialResponseDTO;
+
 import com.prashant.api.ecom.ducart.services.TestimonialService;
 
 @RestController
@@ -30,13 +31,16 @@ public class TestimonialController {
 
   // create testimonial with image
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Testimonial> createTestimonial(@RequestPart("data") String jsonData,
+  public ResponseEntity<TestimonialResponseDTO> createTestimonial(@RequestPart("data") String jsonData,
       @RequestPart(value = "pic") MultipartFile file) {
     try {
+      // Convert to JsonData to Java Object
       ObjectMapper mapper = new ObjectMapper();
       TestimonialDTO testimonialDTO = mapper.readValue(jsonData, TestimonialDTO.class);
-      Testimonial testimonial = testimonialService.createTestimonial(testimonialDTO, file);
-      return ResponseEntity.ok(testimonial);
+      // call service layer
+      TestimonialResponseDTO testimonialResponseDTO = testimonialService.createTestimonial(testimonialDTO, file);
+      // return response
+      return ResponseEntity.status(HttpStatus.OK).body(testimonialResponseDTO);
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
@@ -44,21 +48,22 @@ public class TestimonialController {
 
   // getAll testimonials
   @GetMapping
-  public ResponseEntity<List<Testimonial>> getAllTestimonials() {
+  public ResponseEntity<List<TestimonialResponseDTO>> getAllTestimonials() {
     return ResponseEntity.status(HttpStatus.OK).body(testimonialService.getAllTestimonials());
   }
 
   // update testimonial by id
   @PutMapping("/{id}")
-  public ResponseEntity<Testimonial> updateTestimonial(
+  public ResponseEntity<TestimonialResponseDTO> updateTestimonial(
       @PathVariable Long id,
       @RequestPart("data") String jsonData,
       @RequestPart("pic") MultipartFile file) {
     try {
       ObjectMapper mapper = new ObjectMapper();
       TestimonialDTO testimonialDTO = mapper.readValue(jsonData, TestimonialDTO.class);
-      Testimonial testimonial = testimonialService.updateTestimonial(id, testimonialDTO, file);
-      return ResponseEntity.ok(testimonial);
+      // call service layer
+      TestimonialResponseDTO testimonialResponseDTO = testimonialService.updateTestimonial(id, testimonialDTO, file);
+      return ResponseEntity.status(HttpStatus.OK).body(testimonialResponseDTO);
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

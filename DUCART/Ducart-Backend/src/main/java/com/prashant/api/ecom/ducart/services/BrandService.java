@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+
 import java.util.List;
+import java.util.stream.Collectors;
 import java.nio.file.Path;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prashant.api.ecom.ducart.entities.Brand;
 import com.prashant.api.ecom.ducart.modal.BrandDTO;
+import com.prashant.api.ecom.ducart.modal.BrandResponseDTO;
 import com.prashant.api.ecom.ducart.repositories.BrandRepo;
 import com.prashant.api.ecom.ducart.utils.FileUploadUtil;
 
@@ -25,18 +28,31 @@ public class BrandService {
   String uploadDir = FileUploadUtil.getUploadDirFor("brands");
 
   // create brand with image
-  public Brand createBrand(BrandDTO brandDTO, MultipartFile file) throws IOException {
+  public BrandResponseDTO createBrand(BrandDTO brandDTO, MultipartFile file) throws IOException {
     // File upload logic
     if (file != null && !file.isEmpty()) {
       String relativePath = saveFile(file);
       brandDTO.setPic(relativePath);
     }
 
-    // Save the brand to the database
+    // Convert BrandDTO to Entity
     Brand brand = new Brand();
     BeanUtils.copyProperties(brandDTO, brand);
-    return brandRepo.save(brand);
 
+    // save Entity
+    Brand saveBrand = brandRepo.save(brand);
+    // Convert Entity to ResponseDTO
+    BrandResponseDTO brandResponseDTO = mapTOResponseDTO(saveBrand);
+
+    return brandResponseDTO;
+
+  }
+
+  // Helper Method to map brand to brandResponseDTO
+  private BrandResponseDTO mapTOResponseDTO(Brand brand) {
+    BrandResponseDTO brandResponseDTO = new BrandResponseDTO();
+    BeanUtils.copyProperties(brand, brandResponseDTO);
+    return brandResponseDTO;
   }
 
   // save file Method
@@ -48,12 +64,17 @@ public class BrandService {
   }
 
   // getAll brands
-  public List<Brand> getAllBrands() {
-    return brandRepo.findAll();
+  public List<BrandResponseDTO> getAllBrands() {
+    // find brands by entity
+    List<Brand> brands = brandRepo.findAll();
+    // Convert entity list to Response List
+    List<BrandResponseDTO> brandResponseDTOs = brands.stream().map(this::mapTOResponseDTO).collect(Collectors.toList());
+    return brandResponseDTOs;
+
   }
 
   // update brand by id
-  public Brand updateBrandById(Long id, BrandDTO brandDTO, MultipartFile file) throws IOException {
+  public BrandResponseDTO updateBrandById(Long id, BrandDTO brandDTO, MultipartFile file) throws IOException {
     // File upload logic
     if (file != null && !file.isEmpty()) {
       String relativePath = saveFile(file);
@@ -61,21 +82,20 @@ public class BrandService {
     }
 
     // Update the brand in the database
-    Brand brand = brandRepo.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
+    Brand existbrand = brandRepo.findById(id).orElseThrow(() -> new RuntimeException("Brand not found"));
     brandDTO.setName(brandDTO.getName());
     brandDTO.setPic(brandDTO.getPic());
     brandDTO.setActive(brandDTO.isActive());
     // Copy properties from DTO to entity
-    BeanUtils.copyProperties(brandDTO, brand);
-    return brandRepo.save(brand);
+    BeanUtils.copyProperties(brandDTO, existbrand);
+    // save entity
+    Brand updatedBrand = brandRepo.save(existbrand);
+    // Convert entity to ResponseDTO
+    BrandResponseDTO brandResponseDTO = mapTOResponseDTO(updatedBrand);
+
+    return brandResponseDTO;
   }
 
-  // // delete brand by id
-  // public void deleteBrandById(Long id) {
-  // Brand brand = brandRepo.findById(id).orElseThrow(() -> new
-  // RuntimeException("Brand not found"));
-  // brandRepo.delete(brand);
-  // }
   // delete brand
   public void deleteBrand(Long id) {
     Brand brand = brandRepo.findById(id).orElseThrow(() -> new RuntimeException("Brand not found for id:" + id));

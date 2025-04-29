@@ -2,9 +2,15 @@ package com.prashant.api.ecom.ducart.modal;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProfileDTO {
   @NotBlank(message = "Name is required")
   @Size(min = 3, max = 15, message = "Name must be between 3 and 15 characters")

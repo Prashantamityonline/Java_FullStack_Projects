@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.prashant.api.ecom.ducart.entities.Maincategory;
+import com.prashant.api.ecom.ducart.modal.MainResponseDTO;
 import com.prashant.api.ecom.ducart.modal.MaincategoryDTO;
 import com.prashant.api.ecom.ducart.repositories.MaincategoryRepo;
 import com.prashant.api.ecom.ducart.utils.FileUploadUtil;
@@ -26,17 +27,29 @@ public class MaincategoryService {
      String uploadDir = FileUploadUtil.getUploadDirFor("maincategories");
 
      // Create Maincategory
-     public Maincategory createMaincategory(MaincategoryDTO maincategoryDTO, MultipartFile file) throws IOException {
+     public MainResponseDTO createMaincategory(MaincategoryDTO maincategoryDTO, MultipartFile file) throws IOException {
           // File upload Logic
           if (file != null && !file.isEmpty()) {
                String relativePath = saveFile(file);
                maincategoryDTO.setPic(relativePath);
           }
           Maincategory maincategory = new Maincategory();
+          // convert DTO to entity
           BeanUtils.copyProperties(maincategoryDTO, maincategory);
+          // save entity
+          Maincategory savedMaincategory = maincategoryRepo.save(maincategory);
+          // convert entity to ResponseDTO
+          MainResponseDTO mainResponseDTO = mapToResponseDTO(savedMaincategory);
 
-          return maincategoryRepo.save(maincategory);
+          return mainResponseDTO;
 
+     }
+
+     // Heleper method map to maincategory entity to ResponseDTO
+     private MainResponseDTO mapToResponseDTO(Maincategory maincategory) {
+          MainResponseDTO mainResponseDTO = new MainResponseDTO();
+          BeanUtils.copyProperties(maincategory, mainResponseDTO);
+          return mainResponseDTO;
      }
 
      // save file Method
@@ -48,12 +61,15 @@ public class MaincategoryService {
      }
 
      // getAll maincategories
-     public List<Maincategory> getAllMaincategories() {
-          return maincategoryRepo.findAll();
+     public List<MainResponseDTO> getAllMaincategories() {
+          List<Maincategory> maincategories = maincategoryRepo.findAll();
+          // convert entity list in to ResponseDTO list
+          List<MainResponseDTO> mainResponseDTOs = maincategories.stream().map(this::mapToResponseDTO).toList();
+          return mainResponseDTOs;
      }
 
      // update maincategory by id
-     public Maincategory updateMaincategoryById(Long id, MaincategoryDTO maincategoryDTO, MultipartFile file)
+     public MainResponseDTO updateMaincategoryById(Long id, MaincategoryDTO maincategoryDTO, MultipartFile file)
                throws IOException {
 
           // File upload Logic
@@ -68,8 +84,15 @@ public class MaincategoryService {
           maincategoryDTO.setPic(maincategoryDTO.getPic());
           maincategoryDTO.setActive(maincategoryDTO.isActive());
           if (existingMaincategory != null) {
+               // Convert to maincategoryDTO to entity
                BeanUtils.copyProperties(maincategoryDTO, existingMaincategory);
-               return maincategoryRepo.save(existingMaincategory);
+
+               // save entity
+               Maincategory updatedMaincategory = maincategoryRepo.save(existingMaincategory);
+
+               // Convert to entity to ResponseDTO
+               MainResponseDTO mainResponseDTO = mapToResponseDTO(updatedMaincategory);
+               return mainResponseDTO;
           } else {
                throw new RuntimeException("Maincategory not found");
           }

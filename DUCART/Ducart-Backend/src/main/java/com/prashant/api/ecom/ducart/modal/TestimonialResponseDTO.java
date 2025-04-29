@@ -9,9 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsletterDTO {
-
-  private String email;
-  private boolean active;
+public class TestimonialResponseDTO {
+  private Long id;
+  private String name;
+  private String message;
+  private String pic;
+  private Boolean active;
 
 }

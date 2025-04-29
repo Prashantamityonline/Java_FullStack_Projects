@@ -3,6 +3,7 @@ package com.prashant.api.ecom.ducart.services;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.prashant.api.ecom.ducart.entities.Testimonial;
 import com.prashant.api.ecom.ducart.modal.TestimonialDTO;
+import com.prashant.api.ecom.ducart.modal.TestimonialResponseDTO;
 import com.prashant.api.ecom.ducart.repositories.TestimonialRepo;
 import com.prashant.api.ecom.ducart.utils.FileUploadUtil;
 
@@ -22,17 +24,32 @@ public class TestimonialService {
   String uploadDir = FileUploadUtil.getUploadDirFor("testimonials");
 
   // create testimonial with image
-  public Testimonial createTestimonial(TestimonialDTO testimonialDTO, MultipartFile file) throws IOException {
+  public TestimonialResponseDTO createTestimonial(TestimonialDTO testimonialDTO, MultipartFile file)
+      throws IOException {
     // File upload logic
     if (file != null && !file.isEmpty()) {
       String relativePath = saveFile(file);
       testimonialDTO.setPic(relativePath);
     }
-
-    // Save the testimonial to the database
+    // Convert to TestimonialDTO to Testimonial entity
     Testimonial testimonial = new Testimonial();
     BeanUtils.copyProperties(testimonialDTO, testimonial);
-    return testimonialRepo.save(testimonial);
+
+    // save entity
+    Testimonial savedTestimonial = testimonialRepo.save(testimonial);
+
+    // Convert to entity to TestimonialResponseDTO
+    TestimonialResponseDTO testimonialResponseDTO = mapToResponseDTO(savedTestimonial);
+    return testimonialResponseDTO;
+
+  }
+
+  // Helper method to map Testimonial to TestimonialResponseDTO
+  private TestimonialResponseDTO mapToResponseDTO(Testimonial testimonial) {
+    TestimonialResponseDTO testimonialResponseDTO = new TestimonialResponseDTO();
+    BeanUtils.copyProperties(testimonial, testimonialResponseDTO);
+    return testimonialResponseDTO;
+
   }
 
   // save file Method
@@ -46,12 +63,18 @@ public class TestimonialService {
   }
 
   // getAll testimonials
-  public List<Testimonial> getAllTestimonials() {
-    return testimonialRepo.findAll();
+  public List<TestimonialResponseDTO> getAllTestimonials() {
+    List<Testimonial> testimonials = testimonialRepo.findAll();
+    // Convert entity list to ResponseDTO list
+    List<TestimonialResponseDTO> testimonialResponseDTO = testimonials.stream().map(this::mapToResponseDTO)
+        .collect(Collectors.toList());
+    return testimonialResponseDTO;
+
   }
 
   // update testimonial by id
-  public Testimonial updateTestimonial(Long id, TestimonialDTO testimonialDTO, MultipartFile file) throws IOException {
+  public TestimonialResponseDTO updateTestimonial(Long id, TestimonialDTO testimonialDTO, MultipartFile file)
+      throws IOException {
     // File upload logic
     if (file != null && !file.isEmpty()) {
       String relativePath = saveFile(file);
@@ -64,9 +87,13 @@ public class TestimonialService {
     testimonialDTO.setMessage(testimonialDTO.getMessage());
     testimonialDTO.setPic(testimonialDTO.getPic());
     testimonialDTO.setActive(testimonialDTO.isActive());
-
+    // Convert to DTO to entity
     BeanUtils.copyProperties(testimonialDTO, testimonial);
-    return testimonialRepo.save(testimonial);
+    // save entity
+    Testimonial updatedTestimonial = testimonialRepo.save(testimonial);
+    // Convert to entity to ResponseDTO
+    TestimonialResponseDTO testimonialResponseDTO = mapToResponseDTO(updatedTestimonial);
+    return testimonialResponseDTO;
   }
 
   // delete testimonial by id or image

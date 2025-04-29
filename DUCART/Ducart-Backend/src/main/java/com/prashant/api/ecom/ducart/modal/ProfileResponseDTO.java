@@ -9,9 +9,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NewsletterDTO {
-
-  private String email;
-  private boolean active;
+public class ProfileResponseDTO {
+  private String name;
+  private String phone;
+  private String address;
+  private String pin;
+  private String city;
+  private String state;
+  private String pic;
 
 }

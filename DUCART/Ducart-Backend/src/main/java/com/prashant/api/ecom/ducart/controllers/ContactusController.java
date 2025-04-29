@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.prashant.api.ecom.ducart.entities.Contactus;
 import com.prashant.api.ecom.ducart.modal.ContactusDTO;
+import com.prashant.api.ecom.ducart.modal.ContactusResponseDTO;
 import com.prashant.api.ecom.ducart.services.ContactusService;
 
 @RestController
@@ -24,16 +24,16 @@ public class ContactusController {
   // Endpoint to save contact us details
 
   @PostMapping
-  public ResponseEntity<Contactus> saveContactus(@RequestBody ContactusDTO contactusDTO) {
-    Contactus savedContactus = contactusService.saveContactus(contactusDTO);
-    return ResponseEntity.status(HttpStatus.CREATED).body(savedContactus);
+  public ResponseEntity<ContactusResponseDTO> saveContactus(@RequestBody ContactusDTO contactusDTO) {
+    // call service
+    ContactusResponseDTO contactusResponseDTO = contactusService.saveContactus(contactusDTO);
+    return ResponseEntity.status(HttpStatus.CREATED).body(contactusResponseDTO);
   }
 
   // Endpoint to get all contact us details
   @GetMapping
-  public ResponseEntity<List<Contactus>> getAllContactus() {
-    List<Contactus> contactusList = contactusService.getAllContactus();
-    return ResponseEntity.status(HttpStatus.OK).body(contactusList);
+  public ResponseEntity<List<ContactusResponseDTO>> getAllContactus() {
+    return ResponseEntity.status(HttpStatus.OK).body(contactusService.getAllContactus());
   }
 
 }

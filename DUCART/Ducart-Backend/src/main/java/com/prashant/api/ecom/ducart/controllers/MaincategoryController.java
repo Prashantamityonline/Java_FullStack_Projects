@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prashant.api.ecom.ducart.entities.Maincategory;
+import com.prashant.api.ecom.ducart.modal.MainResponseDTO;
 import com.prashant.api.ecom.ducart.modal.MaincategoryDTO;
 import com.prashant.api.ecom.ducart.services.MaincategoryService;
 
@@ -33,14 +33,17 @@ public class MaincategoryController {
   private MaincategoryService maincategoryService;
 
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE) // Ensure multipart form-data is expected
-  public ResponseEntity<Maincategory> createMaincategory(
+  public ResponseEntity<MainResponseDTO> createMaincategory(
       @RequestPart(value = "data") String jsonData, // JSON data as a string
       @RequestPart(value = "pic") MultipartFile file) {
     try {
+      // Convert JsonData to Java Object
       ObjectMapper mapper = new ObjectMapper();
       MaincategoryDTO maincategoryDTO = mapper.readValue(jsonData, MaincategoryDTO.class);
-      Maincategory maincategory = maincategoryService.createMaincategory(maincategoryDTO, file);
-      return ResponseEntity.ok(maincategory);
+      // call service
+      MainResponseDTO mainResponseDTO = maincategoryService.createMaincategory(maincategoryDTO, file);
+      // response return
+      return ResponseEntity.status(HttpStatus.CREATED).body(mainResponseDTO);
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
@@ -48,62 +51,26 @@ public class MaincategoryController {
 
   // Get all MainCategories
   @GetMapping
-  public ResponseEntity<List<Maincategory>> getAllMaincategories() {
+  public ResponseEntity<List<MainResponseDTO>> getAllMaincategories() {
     return ResponseEntity.status(HttpStatus.OK).body(maincategoryService.getAllMaincategories());
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Map<String, Object>> updateMaincategoryById(
+  public ResponseEntity<MainResponseDTO> updateMaincategoryById(
       @PathVariable Long id,
       @RequestPart("data") String jsonData,
       @RequestPart("pic") MultipartFile file) {
     try {
+      // convert json data into java object
       ObjectMapper mapper = new ObjectMapper();
       MaincategoryDTO maincategoryDTO = mapper.readValue(jsonData, MaincategoryDTO.class);
-
-      Maincategory updatedMaincategory = maincategoryService.updateMaincategoryById(id, maincategoryDTO, file);
-
-      // Create custom JSON response
-      Map<String, Object> response = new HashMap<>();
-      response.put("message", "Maincategory updated successfully");
-      response.put("data", updatedMaincategory);
-
-      return ResponseEntity.ok(response); // 200 + body
+      // call service
+      MainResponseDTO mainResponseDTO = maincategoryService.updateMaincategoryById(id, maincategoryDTO, file);
+      return ResponseEntity.status(HttpStatus.OK).body(mainResponseDTO);
     } catch (IOException e) {
-      Map<String, Object> error = new HashMap<>();
-      error.put("error", "Failed to parse data or update category");
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
-
-  // // Update MainCategory by ID
-  // @PutMapping("/{id}")
-  // public ResponseEntity<Map<String, String>>
-  // updateMaincategoryById(@PathVariable Long id,
-  // @RequestPart(value = "data") String JsonData,
-  // // JSON data as a string
-  // @RequestPart("pic") MultipartFile file) {
-  // try {
-  // // Convert JSON string to MaincategoryDTO object
-  // ObjectMapper mapper = new ObjectMapper();
-  // MaincategoryDTO maincategoryDTO = mapper.readValue(JsonData,
-  // MaincategoryDTO.class);
-  // // Update Maincategory
-  // Maincategory existingMaincategory =
-  // maincategoryService.updateMaincategoryById(id, maincategoryDTO, file);
-
-  // // Create custom JSON response
-  // Map<String, Object> response = new HashMap<>();
-  // response.put("message", "Maincategory updated successfully");
-  // response.put("data", "Maincategory updated succesfully");
-
-  // return ResponseEntity.ok(response);
-  // } catch (IOException e) {
-  // Map<String, String> error = new HashMap<>();
-  // error.put("error", "Failed to parse data or update category");
-  // return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
-  // }
-  // }
 
   // Delete MainCategory by ID
   @DeleteMapping("/{id}")
