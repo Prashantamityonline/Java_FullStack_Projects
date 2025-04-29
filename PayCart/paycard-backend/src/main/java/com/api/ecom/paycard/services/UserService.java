@@ -57,6 +57,7 @@ public class UserService {
         .orElseThrow(() -> new RuntimeException("User not found with ID: " + userid));
   }
 
+  // Update an existing user
   public UserDTO updateUser(Long userid, UserDTO userDTO, MultipartFile file) throws IOException {
     User existingUser = userRepository.findById(userid)
         .orElseThrow(() -> new RuntimeException("User not found"));
@@ -75,7 +76,7 @@ public class UserService {
     // Handle file upload
     if (file != null && !file.isEmpty()) {
       String relativePath = saveFile(file);
-      existingUser.setPic(relativePath); // ✅ Update `existingUser`
+      existingUser.setPic(relativePath);
     }
 
     User updatedUser = userRepository.save(existingUser);

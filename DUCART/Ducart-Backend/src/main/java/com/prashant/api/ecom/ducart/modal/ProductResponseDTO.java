@@ -2,8 +2,6 @@ package com.prashant.api.ecom.ducart.modal;
 
 import java.util.List;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,6 +25,6 @@ public class ProductResponseDTO { // For output data
     private boolean stock;
     private String description;
     private Integer stockQuantity;
-    private List<MultipartFile> pic;
+    private List<String> pic;
     private boolean active;
 }
