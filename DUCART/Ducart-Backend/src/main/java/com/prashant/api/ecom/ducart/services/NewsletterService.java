@@ -19,7 +19,7 @@ public class NewsletterService {
   private NewsletterRepo newsletterRepo;
 
   // Method to save newsletter subscription
-  public NewsletterResponseDTO saveNewsletter(NewsletterDTO newsletterDTO) {
+  public NewsletterResponseDTO createNewsletter(NewsletterDTO newsletterDTO) {
     // Create a new Newsletter entity and copy properties from DTO
     Newsletter newsletter = new Newsletter();
     // convert DTO to entity
@@ -47,5 +47,18 @@ public class NewsletterService {
     List<NewsletterResponseDTO> allNewslattersDTO = allNewslatters.stream().map(this::mapToResponseDTO)
         .collect(Collectors.toList());
     return allNewslattersDTO;
+  }
+
+  // Get subscription by id
+  public NewsletterResponseDTO getNewsletterById(Long id) {
+    Newsletter newsletter = newsletterRepo.findById(id)
+        .orElseThrow(() -> new RuntimeException("Newsletter not found by id:" + id));
+    NewsletterResponseDTO newsletterResponseDTO = mapToResponseDTO(newsletter);
+    return newsletterResponseDTO;
+  }
+
+  // Delete subscription by id
+  public void deleteNewsletterById(Long id) {
+    newsletterRepo.deleteById(id);
   }
 }

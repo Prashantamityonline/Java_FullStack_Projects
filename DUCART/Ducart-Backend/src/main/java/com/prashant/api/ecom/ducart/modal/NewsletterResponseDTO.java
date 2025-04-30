@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class NewsletterResponseDTO {
   private Long id;
   private String email;
-  private String date;
   private boolean active;
 
 }

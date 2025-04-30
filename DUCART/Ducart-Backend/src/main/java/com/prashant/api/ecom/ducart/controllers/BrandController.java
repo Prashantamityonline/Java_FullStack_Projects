@@ -33,10 +33,10 @@ public class BrandController {
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<BrandResponseDTO> createBrand(@RequestPart("data") String jsonData, // JSON data as a string
       @RequestPart("pic") MultipartFile file) throws IOException {
-    // Convert JSON string to BrandDTO object
+    // Convert JSON string to java object BrandDTO
     ObjectMapper mapper = new ObjectMapper();
     BrandDTO brandDTO = mapper.readValue(jsonData, BrandDTO.class);
-    // call service layer
+    // call service
     BrandResponseDTO brandResponseDTO = brandService.createBrand(brandDTO, file);
     return ResponseEntity.status(HttpStatus.CREATED).body(brandResponseDTO);
   }
