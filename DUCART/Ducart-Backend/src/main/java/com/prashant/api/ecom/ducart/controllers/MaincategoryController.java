@@ -55,6 +55,7 @@ public class MaincategoryController {
     return ResponseEntity.status(HttpStatus.OK).body(maincategoryService.getAllMaincategories());
   }
 
+  // update MainCategory by ID
   @PutMapping("/{id}")
   public ResponseEntity<MainResponseDTO> updateMaincategoryById(
       @PathVariable Long id,

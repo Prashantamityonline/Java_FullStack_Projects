@@ -1,0 +1,7 @@
+1735208956171	Delete element
+1735231933595	Rename package 'com.lcwd.service'
+1735237711991	Encapsulate field 'message, ...'
+1735237726513	Encapsulate field 'success, ...'
+1735237735550	Encapsulate field 'status, ...'
+1735239290704	Rename package 'com.prashant.service'
+1735240970918	Rename package 'com.prashant.microservice'

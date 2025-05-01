@@ -25,18 +25,18 @@ public class Newsletter {
 
   private NewsletterService newsletterService;
 
+  // Get All Newsletters
+  @GetMapping
+  public ResponseEntity<List<NewsletterResponseDTO>> getAllNewsletter() {
+    return ResponseEntity.status(HttpStatus.OK).body(newsletterService.getAllNewsLetter());
+  }
+
   // newsletter subscription
   @PostMapping
   public ResponseEntity<NewsletterResponseDTO> createNewsletter(@RequestBody NewsletterDTO newsletterDTO) {
     // call service
     NewsletterResponseDTO newsletterResponseDTO = newsletterService.createNewsletter(newsletterDTO);
     return ResponseEntity.status(HttpStatus.CREATED).body(newsletterResponseDTO);
-  }
-
-  // Get All Newsletters
-  @GetMapping
-  public ResponseEntity<List<NewsletterResponseDTO>> getAllNewsletter() {
-    return ResponseEntity.status(HttpStatus.OK).body(newsletterService.getAllNewsLetter());
   }
 
   // Get newsletter by id

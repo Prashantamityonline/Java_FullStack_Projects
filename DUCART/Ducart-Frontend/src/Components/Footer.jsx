@@ -14,7 +14,7 @@ export default function Footer() {
     });
     response = await response.json();
 
-    if (response.data.find((x) => x.email === email))
+    if (response.find((x) => x.email === email))
       setShow("Your Email Address is Already Registered");
     else {
       response = await fetch(`${process.env.REACT_APP_SERVER}/newsletter`, {
