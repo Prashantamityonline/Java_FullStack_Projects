@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupResponseDTO {
-  private Long id;
+  private Long userid;
   private String name;
   private String username;
   private String email;
   private String phone;
   private String password;
+  private String role;
 
 }

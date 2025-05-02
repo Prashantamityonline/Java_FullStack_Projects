@@ -12,6 +12,7 @@ export default function Signup() {
     phone: "",
     password: "",
     cpassword: "",
+    role: "Admin",
   });
   let [errorMessage, setErrorMessage] = useState({
     name: "Name Field is Mendatory",

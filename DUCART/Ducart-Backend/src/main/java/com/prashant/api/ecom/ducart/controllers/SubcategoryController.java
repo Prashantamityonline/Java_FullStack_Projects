@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.prashant.api.ecom.ducart.entities.Subcategory;
 import com.prashant.api.ecom.ducart.modal.SubcategoryDTO;
+import com.prashant.api.ecom.ducart.modal.SubcategoryResponseDTO;
 import com.prashant.api.ecom.ducart.services.SubcategoryService;
 
 @RestController
@@ -32,13 +32,13 @@ public class SubcategoryController {
 
   // create subcategory
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<Subcategory> createSubcategory(@RequestPart("data") String jsonData, // JSON as a String
+  public ResponseEntity<SubcategoryResponseDTO> createSubcategory(@RequestPart("data") String jsonData,
       @RequestPart("pic") MultipartFile file) {
     try {
       // Convert JSON string to SubcategoryDTO object
       ObjectMapper mapper = new ObjectMapper();
       SubcategoryDTO subcategoryDTO = mapper.readValue(jsonData, SubcategoryDTO.class);
-      Subcategory subcategory = subcategoryService.createSubcategory(subcategoryDTO, file);
+      SubcategoryResponseDTO subcategory = subcategoryService.createSubcategory(subcategoryDTO, file);
       return ResponseEntity.status(HttpStatus.CREATED).body(subcategory);
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -48,32 +48,26 @@ public class SubcategoryController {
 
   // Get all subcategories
   @GetMapping
-  public ResponseEntity<List<Subcategory>> getAllSubcategories() {
+  public ResponseEntity<List<SubcategoryResponseDTO>> getAllSubcategories() {
     return ResponseEntity.status(HttpStatus.OK).body(subcategoryService.getAllSubcategories());
   }
 
   // Update subcategory by ID
   @PutMapping("/{id}")
-  public ResponseEntity<Map<String, Object>> updateSubcategoryById(@PathVariable Long id,
+  public ResponseEntity<SubcategoryResponseDTO> updateSubcategoryById(@PathVariable Long id,
       @RequestPart("data") String jsonData,
       @RequestPart("pic") MultipartFile file) {
     try {
       // Convert JSON string to SubcategoryDTO object
       ObjectMapper mapper = new ObjectMapper();
       SubcategoryDTO subcategoryDTO = mapper.readValue(jsonData, SubcategoryDTO.class);
+      // call serviece
+      SubcategoryResponseDTO subcategoryResponseDTO = subcategoryService.updateSubcategoryById(id, subcategoryDTO,
+          file);
+      return ResponseEntity.status(HttpStatus.OK).body(subcategoryResponseDTO);
+    } catch (IOException ex) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 
-      // Update subcategory
-      Subcategory updatedSubcategory = subcategoryService.updateSubcategoryById(id, subcategoryDTO, file);
-      // Create custom JSON response
-      Map<String, Object> response = new HashMap<>();
-      response.put("message", "Subcategory updated successfully");
-      response.put("data", updatedSubcategory);
-
-      return ResponseEntity.ok(response); // 200 + body
-    } catch (IOException e) {
-      Map<String, Object> error = new HashMap<>();
-      error.put("error", "Failed to parse data or update category");
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
   }
 

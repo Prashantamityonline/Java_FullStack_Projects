@@ -26,7 +26,7 @@ export default function UpdateProfile() {
 
   function getInputData(e) {
     var name = e.target.name;
-    let value = e.target.files ? e.target.files : e.target.value;
+    let value = e.target.files ? e.target.files[0] : e.target.value;
     setErrorMessage((old) => {
       return {
         ...old,
@@ -40,34 +40,34 @@ export default function UpdateProfile() {
       };
     });
   }
-
   async function postData(e) {
     e.preventDefault();
-    let error = Object.values(errorMessage).find((x) => x !== "");
-    if (error) setShow(true);
-    else {
-      var formData = new FormData();
 
-      const jsonBlob = new Blob(
-        [
-          JSON.stringify({
-            name: data.name,
-            phone: data.phone,
-            address: data.address,
-            pin: data.pin,
-            city: data.city,
-            state: data.state,
-          }),
-        ],
-        { type: "application/json" }
-      );
-      formData.append("data", jsonBlob);
+    const hasErrors = Object.values(errorMessage).some((msg) => msg !== "");
+    if (hasErrors) {
+      setShow(true);
+      return;
+    }
 
-      if (data.pic instanceof File) {
-        formData.append("pic", data.pic);
-      }
+    var formData = new FormData();
+    formData.append(
+      "data",
+      JSON.stringify({
+        name: data.name,
+        phone: data.phone,
+        address: data.address,
+        pin: data.pin,
+        city: data.city,
+        state: data.state,
+      })
+    );
 
-      let response = await fetch(
+    if (data.pic instanceof File) {
+      formData.append("pic", data.pic);
+    }
+
+    try {
+      const response = await fetch(
         `${process.env.REACT_APP_SERVER}/user/${localStorage.getItem(
           "userid"
         )}`,
@@ -77,22 +77,99 @@ export default function UpdateProfile() {
         }
       );
 
-      response = await response.json();
-      if (data.role === "Buyer") navigate("/profile");
-      else navigate("/admin");
+      if (response.ok) {
+        if (data.role === "Buyer") navigate("/profile");
+        else navigate("/admin");
+      } else {
+        console.error("Server error:", response.status);
+        // Optionally show UI error
+      }
+    } catch (err) {
+      console.error("Network or server failure", err);
     }
   }
 
   useEffect(() => {
-    (async () => {
-      let response = await fetch(
-        `${process.env.REACT_APP_SERVER}/user/${localStorage.getItem("userid")}`
-      );
-      response = await response.json();
-      if (response) setData({ ...data, ...response });
-      else navigate("/login");
-    })();
-  }, []);
+    let isMounted = true;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVER}/user/${localStorage.getItem(
+            "userid"
+          )}`
+        );
+        if (!response.ok) throw new Error("Fetch failed");
+
+        const result = await response.json();
+        if (isMounted) {
+          setData((prev) => ({ ...prev, ...result }));
+        }
+      } catch (err) {
+        console.error(err);
+        navigate("/login");
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
+
+  // async function postData(e) {
+  //   e.preventDefault();
+  //   let error = Object.values(errorMessage).find((x) => x !== "");
+  //   if (error) setShow(true);
+  //   else {
+  //     var formData = new FormData();
+
+  //     const jsonBlob = new Blob(
+  //       [
+  //         JSON.stringify({
+  //           name: data.name,
+  //           phone: data.phone,
+  //           address: data.address,
+  //           pin: data.pin,
+  //           city: data.city,
+  //           state: data.state,
+  //         }),
+  //       ],
+  //       { type: "application/json" }
+  //     );
+  //     formData.append("data", jsonBlob);
+
+  //     if (data.pic instanceof File) {
+  //       formData.append("pic", data.pic);
+  //     }
+
+  //     let response = await fetch(
+  //       `${process.env.REACT_APP_SERVER}/user/${localStorage.getItem(
+  //         "userid"
+  //       )}`,
+  //       {
+  //         method: "PUT",
+  //         body: formData,
+  //       }
+  //     );
+
+  //     response = await response.json();
+  //     if (data.role === "Buyer") navigate("/profile");
+  //     else navigate("/admin");
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   (async () => {
+  //     let response = await fetch(
+  //       `${process.env.REACT_APP_SERVER}/user/${localStorage.getItem("userid")}`
+  //     );
+  //     response = await response.json();
+  //     if (response) setData({ ...data, ...response });
+  //     else navigate("/login");
+  //   })();
+  // }, []);
   return (
     <>
       <HeroSection title="Profile Update - Update Your Profile" />

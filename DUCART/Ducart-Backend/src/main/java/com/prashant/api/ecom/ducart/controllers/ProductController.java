@@ -50,9 +50,7 @@ public class ProductController {
   // GetAll Product
   @GetMapping
   public ResponseEntity<List<ProductResponseDTO>> getAllProducts() {
-    // call service
-    List<ProductResponseDTO> responseDTOs = productService.getAllProducts();
-    return ResponseEntity.status(HttpStatus.OK).body(responseDTOs);
+    return ResponseEntity.status(HttpStatus.OK).body(productService.getAllProducts());
   }
 
   // Get Product by ID

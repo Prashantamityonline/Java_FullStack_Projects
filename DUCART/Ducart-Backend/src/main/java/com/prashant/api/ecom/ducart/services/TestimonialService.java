@@ -62,14 +62,10 @@ public class TestimonialService {
     return "/uploads/testimonials/" + fileName;
   }
 
-  // getAll testimonials
   public List<TestimonialResponseDTO> getAllTestimonials() {
-    List<Testimonial> testimonials = testimonialRepo.findAll();
-    // Convert entity list to ResponseDTO list
-    List<TestimonialResponseDTO> testimonialResponseDTO = testimonials.stream().map(this::mapToResponseDTO)
+    return testimonialRepo.findAll().stream()
+        .map(this::mapToResponseDTO)
         .collect(Collectors.toList());
-    return testimonialResponseDTO;
-
   }
 
   // update testimonial by id
