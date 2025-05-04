@@ -1365,6 +1365,15 @@
       "role": "Admin",
       "active": true,
       "pic": "product/p16.jpg"
+    },
+    {
+      "id": "a13e",
+      "name": "Prashant Singh",
+      "username": "Prashant@Singh",
+      "email": "Prashant@gmail.com",
+      "phone": "9987543234",
+      "password": "PRashant12!@",
+      "role": "Admin"
     }
   ],
   "newsletter": [
