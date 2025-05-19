@@ -1,0 +1,58 @@
+.chatbox{
+  width: 150px;;
+  border: 2px solid #080808;
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 10px;
+  background-color: rgba(226, 227, 227, 0.822);
+}
+.me.chatbox{
+  color: rgb(10, 76, 207);
+  background-color: rgb(246, 247, 247);
+}
+
+.container{
+  display: flex;
+}
+.container.me{
+  flex-direction: row-reverse;
+}
+.btm{
+    position: fixed;
+    width: 100%;
+    bottom: 2px;
+    display: flex;
+    flex-direction: row;
+    background-color: blue;
+    color: aqua;
+    cursor: pointer;
+}
+.btm input{
+  padding: 10px 0;
+  flex-grow: 1;
+  border-radius: 10px;
+}
+.chat-container{
+  height: 70vh;
+  overflow-y: scroll ;     
+  border: 5px solid blue;
+  border-radius: 10px;
+ 
+  
+  
+}
+div{
+  text-align: center;
+}
+.google{
+height: 50px;
+width: 500px;
+background-color: dodgerblue;
+font-weight: bolder;
+font-size: 20px;
+border-radius: 10px;
+cursor: pointer;
+border: none;
+background-image:url(./google.png);
+}
+

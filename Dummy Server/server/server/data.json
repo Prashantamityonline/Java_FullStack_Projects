@@ -1214,7 +1214,22 @@
       "active": true
     }
   ],
-  "cart": [],
+  "cart": [
+    {
+      "id": "8cd5",
+      "user": null,
+      "product": "b2fb",
+      "name": "Male Jeans Tommy Filfiger",
+      "brand": "Tommy Hilfiger",
+      "color": "Black",
+      "size": "32",
+      "price": 1730,
+      "stockQuantity": 0,
+      "pic": "product/p1.jpg",
+      "qty": 1,
+      "total": 1730
+    }
+  ],
   "checkout": [
     {
       "id": "f18f",
@@ -1325,6 +1340,18 @@
       "price": 1716,
       "stockQuantity": 50,
       "pic": "product/p9.jpg"
+    },
+    {
+      "id": "bce9",
+      "product": "b2fb",
+      "user": "a13e",
+      "name": "Male Jeans Tommy Filfiger",
+      "brand": "Tommy Hilfiger",
+      "color": "Black",
+      "size": "32",
+      "price": 1730,
+      "stockQuantity": 0,
+      "pic": "product/p1.jpg"
     }
   ],
   "user": [
@@ -1373,7 +1400,22 @@
       "email": "Prashant@gmail.com",
       "phone": "9987543234",
       "password": "PRashant12!@",
-      "role": "Admin"
+      "role": "Admin",
+      "address": "Kartik PG ",
+      "city": "NOIDA",
+      "state": "Uttar pradesh",
+      "pin": "201301",
+      "pic": "product/PrashantSIngh.jpg"
+    },
+    {
+      "id": "8629",
+      "name": "vishnu kumar",
+      "username": "vishu@kumar",
+      "email": "vishu@gmail.com",
+      "phone": "8765434567",
+      "password": "Vishnu@123",
+      "role": "Buyer",
+      "active": true
     }
   ],
   "newsletter": [
@@ -1390,6 +1432,11 @@
     {
       "id": "9826",
       "email": "vishankchauhan1@gmail.com",
+      "active": true
+    },
+    {
+      "id": "9101",
+      "email": "Prashant@SinghGmail.com",
       "active": true
     }
   ],
@@ -1413,6 +1460,16 @@
       "message": "This is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample SubjectThis is Sample Subject",
       "active": false,
       "date": "2025-04-24T08:57:40.749Z"
+    },
+    {
+      "id": "cf63",
+      "name": "Prashant Singh",
+      "email": "ps2702204@gmail.com",
+      "phone": "9876543212",
+      "subject": "java full stack developer",
+      "message": "🧠 जब मन थक जाए, जब विचार भ्रमित हों…\nश्री कृष्ण के शब्द स्मृति को फिर से जागृत कर देते हैं।\nये सिर्फ एक एडिट नहीं — ये है आत्मा की शक्ति का अनुभव।\n\n🎧 सुनो और महसूस करो...\n💬 “कर्म करो, फल की चिंता मत करो।”\n🌿 Geeta का ज्ञान, जीवन का समाधान।",
+      "active": true,
+      "date": "2025-05-16T09:27:27.784Z"
     }
   ]
 }
