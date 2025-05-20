@@ -82,7 +82,7 @@ Ducart Java Full Stack Project — A complete e-commerce web application built u
 - ![Screenshot 2025-03-01 000340](https://github.com/user-attachments/assets/4ca5518f-fd5b-4c8c-aefb-8d85afaa442e)
 
 
-# 🏪 APNA MARKET 
+# 🏪 APNA BAZAR 
 - All projects follow the same modern tech stack and best practices.
  # APNA MARKET Ecommerce Website Home Page Show ---
  ![apna1](https://github.com/user-attachments/assets/e0453edc-bbf0-4c60-a126-52d54315bcc6)
@@ -116,8 +116,9 @@ Ducart Java Full Stack Project — A complete e-commerce web application built u
 │   └── frontend (ReactJS)
 │
 └── APNA-MARKET
-    ├── backend (Spring Boot)
-    └── frontend (ReactJS)
+|  └── frontend (ReactJS)
+|  |-- backend (Spring Boot)
+|
 # 🔥 Features
 - Authentication & Authorization with Spring Security
 - Image upload & management (DUCART)
