@@ -89,7 +89,7 @@ export default function Signup() {
             email: data.email,
             phone: data.phone,
             password: data.password,
-            role: "Admin",
+            role: "Buyer",
           }),
         });
         response = await response.json();

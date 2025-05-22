@@ -1,0 +1,74 @@
+What is C Compiler:
+---------------------
+A compiler is a software that converts the source code to the object code. 
+
+In other words, we can say that it converts the high-level language to machine/binary language. Moreover, it is necessary to perform this step to make the program executable. 
+
+This is because the computer understands only binary language.
+
+What is C Compiler:
+---------------------
+A compiler is a special program that translates a programming language's source code into machine code, bytecode or another programming language. 
+
+The source code is typically written in a high-level, human-readable language such as Java or C++.
+
+What is C Compiler:
+--------------------
+a computer program that translates an entire set of instructions written in a higher-level symbolic language (such as C) into machine language before the instructions can be executed.
+
+
+
+What is C Interpreter:
+---------------------
+An interpreter translates the code line-by-line when the program is running.
+
+Difference B/W Compiler and Interpreter:
+-----------------------------------------
+A compiler is defined as a software that transforms an entire set of source code into object code and saves it as a file before executing it. 
+
+Conversely, an interpreter converts and executes source code line by line without saving it and points out errors along the way.
+----
+Compiled language follows at least two levels to get from source code to execution.
+
+Interpreted language follows one step to get from source code to execution.
+----
+
+What is called interpreter in computer?
+------------------------------------------
+An interpreter is a program that directly executes the instructions in a high-level language, without converting it into machine code. 
+
+In programming, we can execute a program in two ways. Firstly, through compilation and secondly, through an interpreter. 
+
+The common way is to use a compiler.
+
+
+Is compiler faster than interpreter?
+--------------------------------------
+A compiler typically runs a program faster because it translates an entire program at once. 
+
+Meanwhile, the interpreter translates a program line by line. 
+
+This makes its overall speed and execution slower.
+
+
+Which is an interpreter language?
+---------------------------------
+An interpreted language is a language in which the implementations execute instructions directly without earlier compiling a program into machine language. 
+
+The compiled programs run faster than interpreted programs.
+
+
+
+What is library in C language?
+---------------------------------
+Library functions in C are also inbuilt functions in C language. 
+
+These inbuilt functions are located in some common location, and it is known as the library. 
+
+All the functions are used to execute a particular operation. 
+
+These library functions are generally preferred to obtain the predefined output.
+
+Note:
+------
+The C standard library or libc is the standard library for the C programming language.
