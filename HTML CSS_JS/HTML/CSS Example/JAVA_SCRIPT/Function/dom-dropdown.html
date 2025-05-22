@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<style>
+  *{
+    margin:0;
+
+  }
+  .menu{
+    width: 40vw;
+  }
+  .menu h3{
+    background-color: blue;
+    color: white;
+    padding: 10px;
+
+  }
+  .material-symbols-outlined{
+    float: right;
+    cursor: pointer;
+  }
+  .menu-items{
+    width: 100%;
+  }
+  .menu-items ul{
+     list-style-type: none;
+
+  }
+  .menu-items li{
+    background-color: blue;
+    padding: 10px;
+  }
+  .menu-items a{
+    color: white;
+  }
+  .menu-items li:hover{
+    background-color: navy;
+
+  }
+  .menu-items a{
+    color: white;
+    text-decoration: none;
+  }
+  .hide{
+    display: none;
+  }
+
+</style>
+</head>
+<body>
+  <div class="menu">
+    <h3>Menu<span class="material-symbols-outlined">
+      menu
+      </span></h3>
+      <div class="menu-items hide" onclick="fun()"><ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Fag</a></li>
+        <li><a href="#">Contact Us</a></li>
+
+      </ul>
+    </div>
+  </div>
+  <script>
+    var menuItems = document.querySelector(".menu-items")
+    function fun(){
+      menuItems.classList.toggle("hide")
+    }
+  </script>
+</body>
+</html>
+
+

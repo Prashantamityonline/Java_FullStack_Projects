@@ -1,0 +1,29 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  background-color: #262a2f;
+  color: 333;
+}
+.search-box{
+  width: 600px;
+  background-color: white;
+  margin: 200px auto 0;
+  border-radius: 5px;
+}
+.row{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+input{
+  flex: 1;
+  height: 50px;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 18px;
+  columns: #333;
+}

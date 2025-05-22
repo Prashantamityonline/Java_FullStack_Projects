@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    *{
+      margin: 0;
+    }
+    main{
+      width: 100vw;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      background-color: rgb(231, green, blue);
+      position: relative;
+    }
+    .first,.second,.third{
+      height: 80%;
+      width: 80%;
+      display: grid;
+      place-items: center;
+    }
+    .fourth{
+      height: 80%;
+      width: 80%;
+
+    }
+    .first{
+      background-color: rgb(230, 235, 239);
+    }
+    .second{
+      background-color: white;
+      position: relative;
+    }
+    .third{
+      background-color: rgb(230, 235, 239);
+      position: relative;
+    }
+    .fourth{
+      background-color: whitesmoke;
+      position: relative;
+    }
+    #box1{
+       background-color: green;
+    }
+    .box{
+      height: 200px;
+      width: 200px;
+      color: wheat;
+      display: inline-block;
+    }
+    #box2{
+       background-color: red;
+    }
+    #box3{
+       background-color: purple;
+       position: absolute;
+       top: 50px;
+       right: 50px;
+    }
+    #box4{
+       background-color: black;
+    }
+    #box5{
+       background-color: blue;
+    }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <first>
+      <div class="second">
+        <div class="third">
+          <div class="fourth">
+            <div class="box" id="box1"></div>
+            <div class="box" id="box2"></div>
+            <div class="box" id="box3"></div>
+            <div class="box" id="box4"></div>
+            <div class="box" id="box5"></div>
+          </div>
+        </div>
+      </div>
+    </first>
+  </div>                                                                                                                                                                                                       
+</body>
+</html>

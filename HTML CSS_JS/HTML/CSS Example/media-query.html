@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    
+    *{
+      margin: 0;
+    }
+    .main{
+      height: 100vh;
+      width: 100vw;
+      display:grid;
+
+    grid-template-columns: auto auto auto auto;
+    gap: 5px;
+    }
+    .box{
+      display: grid;
+      place-items: center;
+      background-color: blue;
+      color: wheat;
+    }
+    #box1, #box14{
+      grid-column: 1/6 span;
+    }
+    @media only screen and (min-width:1080px) and (max-width:1920px){
+      .main{
+      height: 100vh;
+      width: 100vw;
+      display:grid;
+
+    grid-template-columns: auto auto auto auto;
+    gap: 5px;
+    }
+    .box{
+      
+      background-color: red;
+      
+    }
+    #box1, #box14{
+      grid-column: 1/4 span;
+    }
+  }
+  </style>
+</head>
+<body>
+  <div class="main">
+    <div class="box" id="box1">box1</div>
+    <div class="box" id="box2">box2</div>
+    <div class="box" id="box3">box3</div>
+    <div class="box" id="box4">box4</div>
+    <div class="box" id="box5">box5</div>
+    <div class="box" id="box6">box6</div>
+    <div class="box" id="box7">box7</div>
+    <div class="box" id="box8">box8</div>
+    <div class="box" id="box9">box9</div>
+    <div class="box" id="box10">box10</div>
+    <div class="box" id="box11">box11</div>
+    <div class="box" id="box12">box12</div>
+    <div class="box" id="box13">box13</div>
+    <div class="box" id="box14">box14</div>
+  </div>
+</body>
+</html>

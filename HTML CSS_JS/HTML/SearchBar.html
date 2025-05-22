@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Bar</title>
+</head>
+<style>
+  *{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.search-box{
+  width: 600px;
+  background-color: white;
+  margin: 200px auto 0;
+  border-radius: 5px;
+  border-color: black;
+}
+.row{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+input{
+  flex: 1;
+  height: 50px;
+  background: transparent;
+  border: 5px;
+  outline: 2;
+  font-size: 18px;
+  color: #333;
+}
+button{
+  height: 50px;
+  width: 100px;
+}
+</style>
+<body>
+  <div class="Search-box">
+    <div class="row">
+      <input type="text" placeholder="Search anything" id="MyInput" autocomplete="off" onkeyup="searchFunction()">
+      <button>Search</button>
+    </div>
+  </div>
+  <ul id="myUL">
+    <li><a href="#">Java</a></li>
+    <li><a href="#">MySql</a></li>
+    <li><a href="#">React Js</a></li>
+    <li><a href="#">java Script</a></li>
+    <li>Node js</li>
+    <li></li>
+
+  </ul>
+  <script>
+    const searchFunction = () =>{
+      let filter = document.getElementById('myInput').value.toUpperCase();
+
+      let myInput = document.getElementById('myUL');
+
+    }
+  </script>
+</body>
+</html>
