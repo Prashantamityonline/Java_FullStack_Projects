@@ -85,6 +85,10 @@ Ducart Java Full Stack Project — A complete e-commerce web application built u
 
 # 🏪 APNA MARKET
 
+<<<<<<< HEAD
+=======
+# 🏪 APNA BAZAR 
+>>>>>>> acecfefb2e86abddbe67ee3313e47bcf33a06b46
 - All projects follow the same modern tech stack and best practices.
 
 # APNA MARKET Ecommerce Website Home Page Show ---
@@ -128,9 +132,15 @@ Ducart Java Full Stack Project — A complete e-commerce web application built u
 │ └── frontend (ReactJS)
 │
 └── APNA-MARKET
+<<<<<<< HEAD
 ├── backend (Spring Boot)
 └── frontend (ReactJS)
 
+=======
+|  └── frontend (ReactJS)
+|  |-- backend (Spring Boot)
+|
+>>>>>>> acecfefb2e86abddbe67ee3313e47bcf33a06b46
 # 🔥 Features
 
 - Authentication & Authorization with Spring Security
@@ -144,7 +154,11 @@ Ducart Java Full Stack Project — A complete e-commerce web application built u
 
 - Clone the repository:
 
+<<<<<<< HEAD
 - git clone [https://github.com/PrasantfullStack/Java-FullStack-Projects.git]
+=======
+- git clone [https://github.com/PrasantFullStack/Java_FullStack_Projects.git]
+>>>>>>> acecfefb2e86abddbe67ee3313e47bcf33a06b46
 - cd java-fullstack-projects
   Navigate into any project folder (DUCART, PayCart, or APNA-MARKET) and follow the setup instructions in their respective README.md files.
 
@@ -153,6 +167,16 @@ Ducart Java Full Stack Project — A complete e-commerce web application built u
 Pull requests are welcome! For major changes, please open an issue first to discuss what you would like to change.
 
 # 📧 Contact
+<<<<<<< HEAD
+=======
+ - Created with ❤️ by Prashant Singh)
+ - 📧 Email: ps2702204@gmail.com
+- 🌐 GitHub: https://github.com/PrasantFullStack
+- 🔗 LinkedIn: https://www.linkedin.com/in/prasant-singh-745ba1353/
+- ▶️ YouTube: https://www.youtube.com/@LearnWithPrashantSingh
+- 💼 Naukri: https://www.naukri.com/mnjuser/profile
+- 🚀 Hiriest: https://www.hirist.tech/myprofile
+>>>>>>> acecfefb2e86abddbe67ee3313e47bcf33a06b46
 
 - Created with ❤️ by Prashant Singh)
 
