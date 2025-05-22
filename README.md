@@ -129,7 +129,7 @@ Ducart Java Full Stack Project — A complete e-commerce web application built u
 # 🛠️ How to Run
 - Clone the repository:
 
-- git clone [https://github.com/Prashantamityonline/Java-FullStack-Projects.git]
+- git clone [https://github.com/PrasantFullStack/Java-FullStack-Projects.git]
 - cd java-fullstack-projects
 Navigate into any project folder (DUCART, PayCart, or APNA-MARKET) and follow the setup instructions in their respective README.md files.
 
