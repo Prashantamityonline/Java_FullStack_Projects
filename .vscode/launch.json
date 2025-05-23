@@ -2,13 +2,9 @@
   "configurations": [
     {
       "type": "java",
-      "name": "Spring Boot-DucartBackendApplication<Ducart-Backend>",
+      "name": "Add",
       "request": "launch",
-      "cwd": "${workspaceFolder}",
-      "mainClass": "com.prashant.api.ecom.ducart.DucartBackendApplication",
-      "projectName": "Ducart-Backend",
-      "args": "",
-      "envFile": "${workspaceFolder}/.env"
+      "mainClass": "Add"
     }
   ]
 }
