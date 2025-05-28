@@ -116,9 +116,9 @@ export default function Navbar() {
             <NavLink to="/contactus" className="nav-item nav-link">
               Contact Us
             </NavLink>
-            <NavLink to="/admin" className="nav-item nav-link">
+            {/* <NavLink to="/admin" className="nav-item nav-link">
               Admin
-            </NavLink>
+            </NavLink> */}
             {localStorage.getItem("login") ? (
               <div className="nav-item dropdown">
                 <p
