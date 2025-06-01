@@ -31,7 +31,7 @@ public class ProductService {
   // create Product
   public ProductResponseDTO createProduct(ProductDTO productDTO, MultipartFile[] files) throws IOException {
     // save file logic
-    List<String> relativePaths = saveFile(files);
+    List<String> relativePaths = saveFiles(files);
     productDTO.setPic(relativePaths);
     // Convert ProductDTO to Product entity
     Product product = new Product();
@@ -41,9 +41,7 @@ public class ProductService {
     Product saveProduct = productRepo.save(product);
 
     // Convert Product entity to ProductResponseDTO
-    ProductResponseDTO productResponseDTO = mapToResponseDTO(saveProduct);
-
-    return productResponseDTO;
+    return mapToResponseDTO(saveProduct);
   }
 
   // Helper method to map Product to ProductResponseDTO
@@ -54,7 +52,7 @@ public class ProductService {
   }
 
   // Save multiple files logic
-  private List<String> saveFile(MultipartFile[] files) throws IOException {
+  private List<String> saveFiles(MultipartFile[] files) throws IOException {
     List<String> filePaths = new ArrayList<>();
     if (files != null && files.length > 0) {
       for (MultipartFile file : files) {
@@ -79,12 +77,7 @@ public class ProductService {
 
   // Get All Products
   public List<ProductResponseDTO> getAllProducts() {
-    List<Product> products = productRepo.findAll();
-    // Convert List<Product> to List<ProductResponseDTO>
-    List<ProductResponseDTO> productResponseDTOs = products.stream()
-        .map(this::mapToResponseDTO)
-        .collect(Collectors.toList());
-    return productResponseDTOs;
+    return productRepo.findAll().stream().map(this::mapToResponseDTO).collect(Collectors.toList());
   }
 
   // Get Product by Id
@@ -98,7 +91,7 @@ public class ProductService {
   }
 
   // Update Product
-  public ProductResponseDTO updateProductById(Long id, ProductDTO productDTO, MultipartFile file) throws IOException {
+  public ProductResponseDTO updateProductById(Long id, ProductDTO productDTO, MultipartFile files) throws IOException {
     // find existing Product by id and update its properties
     Product existProduct = productRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Product not found by Id :" + id));
@@ -111,7 +104,7 @@ public class ProductService {
     productDTO.setBasePrice(productDTO.getBasePrice());
     productDTO.setDiscount(productDTO.getDiscount());
     productDTO.setFinalPrice(productDTO.getFinalPrice());
-    productDTO.setStock(productDTO.isStock());
+    productDTO.setStock(productDTO.getStock());
     productDTO.setDescription(productDTO.getDescription());
     productDTO.setStockQuantity(productDTO.getStockQuantity());
     productDTO.setPic(productDTO.getPic());

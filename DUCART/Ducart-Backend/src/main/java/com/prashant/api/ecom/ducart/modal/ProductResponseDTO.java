@@ -22,9 +22,9 @@ public class ProductResponseDTO { // For output data
     private Double basePrice;
     private Double discount;
     private Double finalPrice;
-    private boolean stock;
+    private Boolean stock;
     private String description;
     private Integer stockQuantity;
     private List<String> pic;
-    private boolean active;
+    private Boolean active;
 }

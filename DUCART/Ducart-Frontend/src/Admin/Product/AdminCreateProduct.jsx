@@ -129,10 +129,13 @@ export default function AdminCreateProduct() {
     );
 
     // Handle images
-    if (data.pic instanceof File) {
-      formData.append("pic", data.pic);
+    if (Array.isArray(data.pic)) {
+      data.pic.forEach((file, index) => {
+        if (file instanceof File) {
+          formData.append("pic", file, file.name);
+        }
+      });
     }
-
     dispatch(createMultipartRecord(formData));
     navigate("/admin/product");
   };

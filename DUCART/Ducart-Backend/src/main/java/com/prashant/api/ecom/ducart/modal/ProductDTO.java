@@ -39,7 +39,7 @@ public class ProductDTO { // For input data
   @NotBlank(message = "final price is required")
   private Double finalPrice;
 
-  private boolean stock;
+  private Boolean stock;
 
   @NotBlank(message = "description is required")
   private String description;
