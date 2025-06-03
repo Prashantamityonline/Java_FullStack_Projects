@@ -35,12 +35,12 @@ export default function AdminCreateProduct() {
     brand: "",
     color: "",
     size: "",
-    basePrice: "",
-    discount: "",
-    finalPrice: "",
+    basePrice: 0,
+    discount: 0,
+    finalPrice: 0,
     stock: true,
     description: "",
-    stockQuantity: "",
+    stockQuantity: 0,
     active: true,
     pic: [],
   });
@@ -58,8 +58,9 @@ export default function AdminCreateProduct() {
   const [show, setShow] = useState(false);
 
   const getInputData = (e) => {
-    let name = e.target.name;
-    let value = e.target.files ? e.target.files : e.target.value;
+    const name = e.target.name;
+    const value = e.target.files ? e.target.files : e.target.value;
+
     if (name !== "active") {
       setErrorMessage((prev) => ({
         ...prev,
@@ -71,9 +72,7 @@ export default function AdminCreateProduct() {
       ...prev,
       [name]:
         name === "active" || name === "stock"
-          ? value === "1"
-            ? true
-            : false
+          ? value === "true" || value === true
           : value,
     }));
   };
@@ -81,28 +80,21 @@ export default function AdminCreateProduct() {
   const postData = (e) => {
     e.preventDefault();
 
-    const hasError = Object.values(errorMessage).find((x) => x !== "");
+    const hasError = Object.values(errorMessage).some((msg) => msg);
     if (hasError) return setShow(true);
 
-    var formData = new FormData();
-    // Ensure data is available before accessing index 0
+    const formData = new FormData();
+
     const maincategory =
-      data.maincategory !== ""
-        ? data.maincategory
-        : MaincategoryStateData?.[0]?.name || "";
-
+      data.maincategory || MaincategoryStateData?.[0]?.name || "";
     const subcategory =
-      data.subcategory !== ""
-        ? data.subcategory
-        : SubcategoryStateData?.[0]?.name || "";
+      data.subcategory || SubcategoryStateData?.[0]?.name || "";
+    const brand = data.brand || BrandStateData?.[0]?.name || "";
 
-    const brand =
-      data.brand !== "" ? data.brand : BrandStateData?.[0]?.name || "";
-
-    const bp = data.basePrice || 0;
-    const discount = data.discount || 0;
-    const fp = data.finalPrice || bp - (bp * discount) / 100;
-    const stockQuantity = data.stockQuantity || 0;
+    const bp = parseFloat(data.basePrice) || 0;
+    const discount = parseFloat(data.discount) || 0;
+    const fp = parseFloat(data.finalPrice) || bp - (bp * discount) / 100;
+    const stockQuantity = parseInt(data.stockQuantity) || 0;
 
     formData.append(
       "data",
@@ -110,17 +102,17 @@ export default function AdminCreateProduct() {
         [
           JSON.stringify({
             name: data.name,
-            maincategory: maincategory,
-            subcategory: subcategory,
-            brand: brand,
+            maincategory,
+            subcategory,
+            brand,
             color: data.color,
             size: data.size,
             basePrice: bp,
-            discount: discount,
+            discount,
             finalPrice: fp,
             stock: data.stock,
-            stockQuantity: stockQuantity,
-            description: rte.getHTMLCode(),
+            stockQuantity,
+            description: rte?.getHTMLCode() || "",
             active: data.active,
           }),
         ],
@@ -128,17 +120,129 @@ export default function AdminCreateProduct() {
       )
     );
 
-    // Handle images
     if (Array.isArray(data.pic)) {
-      data.pic.forEach((file, index) => {
+      data.pic.forEach((file) => {
         if (file instanceof File) {
           formData.append("pic", file, file.name);
         }
       });
     }
+
     dispatch(createMultipartRecord(formData));
     navigate("/admin/product");
   };
+
+  // const [data, setData] = useState({
+  //   name: "",
+  //   maincategory: "",
+  //   subcategory: "",
+  //   brand: "",
+  //   color: "",
+  //   size: "",
+  //   basePrice: "",
+  //   discount: "",
+  //   finalPrice: "",
+  //   stock: true,
+  //   description: "",
+  //   stockQuantity: "",
+  //   active: true,
+  //   pic: [],
+  // });
+
+  // const [errorMessage, setErrorMessage] = useState({
+  //   name: "Name Field is Mandatory",
+  //   color: "Color Field is Mandatory",
+  //   size: "Size Field is Mandatory",
+  //   basePrice: "Base Price Field is Mandatory",
+  //   discount: "Discount Field is Mandatory",
+  //   stockQuantity: "Stock Quantity Field is Mandatory",
+  //   pic: "Pic Field is Mandatory",
+  // });
+
+  // const [show, setShow] = useState(false);
+
+  // const getInputData = (e) => {
+  //   let name = e.target.name;
+  //   let value = e.target.files ? e.target.files : e.target.value;
+  //   if (name !== "active") {
+  //     setErrorMessage((prev) => ({
+  //       ...prev,
+  //       [name]: e.target.files ? imageValidators(e) : formValidators(e),
+  //     }));
+  //   }
+
+  //   setData((prev) => ({
+  //     ...prev,
+  //     [name]:
+  //       name === "active" || name === "stock"
+  //         ? value === "1"
+  //           ? true
+  //           : false
+  //         : value,
+  //   }));
+  // };
+
+  // const postData = (e) => {
+  //   e.preventDefault();
+
+  //   const hasError = Object.values(errorMessage).find((x) => x !== "");
+  //   if (hasError) return setShow(true);
+
+  //   var formData = new FormData();
+  //   // Ensure data is available before accessing index 0
+  //   const maincategory =
+  //     data.maincategory !== ""
+  //       ? data.maincategory
+  //       : MaincategoryStateData?.[0]?.name || "";
+
+  //   const subcategory =
+  //     data.subcategory !== ""
+  //       ? data.subcategory
+  //       : SubcategoryStateData?.[0]?.name || "";
+
+  //   const brand =
+  //     data.brand !== "" ? data.brand : BrandStateData?.[0]?.name || "";
+
+  //   const bp = data.basePrice || 0;
+  //   const discount = data.discount || 0;
+  //   const fp = data.finalPrice || bp - (bp * discount) / 100;
+  //   const stockQuantity = data.stockQuantity || 0;
+
+  //   formData.append(
+  //     "data",
+  //     new Blob(
+  //       [
+  //         JSON.stringify({
+  //           name: data.name,
+  //           maincategory: maincategory,
+  //           subcategory: subcategory,
+  //           brand: brand,
+  //           color: data.color,
+  //           size: data.size,
+  //           basePrice: bp,
+  //           discount: discount,
+  //           finalPrice: fp,
+  //           stock: data.stock,
+  //           stockQuantity: stockQuantity,
+  //           description: rte.getHTMLCode(),
+  //           active: data.active,
+  //         }),
+  //       ],
+  //       { type: "application/json" }
+  //     )
+  //   );
+
+  //   // Handle images
+  //   if (Array.isArray(data.pic)) {
+  //     data.pic.forEach((file, index) => {
+  //       if (file instanceof File) {
+  //         formData.append("pic", file, file.name);
+  //       }
+  //     });
+  //   }
+  //   dispatch(createMultipartRecord(formData));
+  //   navigate("/admin/product");
+  // };
 
   useEffect(() => {
     rte = new window.RichTextEditor(refdiv.current);

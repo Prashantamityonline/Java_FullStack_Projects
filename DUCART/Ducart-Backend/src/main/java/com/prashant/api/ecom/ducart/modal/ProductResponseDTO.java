@@ -26,5 +26,5 @@ public class ProductResponseDTO { // For output data
     private String description;
     private Integer stockQuantity;
     private List<String> pic;
-    private Boolean active;
+    private boolean active;
 }
