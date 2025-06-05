@@ -48,7 +48,7 @@ public class ProductDTO { // For input data
   private Integer stockQuantity;
 
   @NotNull(message = "Product images are required")
-  private List<String> pic;
+  private List<String> pics;
 
   private boolean active;
 }

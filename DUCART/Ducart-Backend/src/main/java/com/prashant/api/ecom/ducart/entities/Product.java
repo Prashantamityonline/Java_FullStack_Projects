@@ -37,7 +37,7 @@ public class Product {
   private Integer stockQuantity;
 
   @ElementCollection
-  private List<String> pic;
+  private List<String> pics;
 
   private boolean active;
 }

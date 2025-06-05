@@ -31,7 +31,7 @@ public class ProductService {
   // create Product
   public ProductResponseDTO createProduct(ProductDTO productDTO, MultipartFile[] files) throws IOException {
     List<String> relativePaths = saveFiles(files);
-    productDTO.setPic(relativePaths);
+    productDTO.setPics(relativePaths);
 
     Product product = new Product();
     BeanUtils.copyProperties(productDTO, product);
@@ -79,7 +79,7 @@ public class ProductService {
 
     if (files != null && files.length > 0) {
       List<String> updatedPaths = saveFiles(files);
-      productDTO.setPic(updatedPaths);
+      productDTO.setPics(updatedPaths);
     }
 
     BeanUtils.copyProperties(productDTO, existProduct);
@@ -90,8 +90,8 @@ public class ProductService {
   public void deleteProduct(Long id) {
     Product product = productRepo.findById(id)
         .orElseThrow(() -> new RuntimeException("Product is not found By Id:" + id));
-    if (product.getPic() != null) {
-      for (String filePath : product.getPic()) {
+    if (product.getPics() != null) {
+      for (String filePath : product.getPics()) {
         deleteFile(filePath);
       }
     }
