@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,7 +109,7 @@ public class SubcategoryService {
   // Helper method to delete a file by its path
   private void deleteFile(String filePath) {
     try {
-      Path path = Paths.get(uploadDir, new File(filePath).getName());
+      Path path = Path.of(uploadDir, new File(filePath).getName());
       Files.deleteIfExists(path);
     } catch (IOException e) {
       System.err.println("Error deleting file: " + filePath + " - " + e.getMessage());

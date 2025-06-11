@@ -3,7 +3,6 @@ package com.prashant.api.ecom.ducart.services;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -82,7 +81,7 @@ public class UserService {
   // save file Method
   private String saveFile(MultipartFile file) throws IOException {
     String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-    Path filePath = Paths.get(uploadDir, fileName);
+    Path filePath = Path.of(uploadDir, fileName);
     Files.write(filePath, file.getBytes());
     return "/uploads/users/" + fileName;
   }

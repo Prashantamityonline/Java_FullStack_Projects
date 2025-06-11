@@ -3,7 +3,6 @@ package com.prashant.api.ecom.ducart.services;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +57,7 @@ public class BrandService {
   // save file Method
   private String saveFile(MultipartFile file) throws IOException {
     String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-    Path filePath = Paths.get(uploadDir, fileName);
+    Path filePath = Path.of(uploadDir, fileName);
     Files.write(filePath, file.getBytes());
     return "/uploads/brands/" + fileName;
   }
@@ -108,7 +107,7 @@ public class BrandService {
   // Helper method to delete a file by its path
   private void deleteFile(String filePath) {
     try {
-      Path path = Paths.get(uploadDir, new File(filePath).getName());
+      Path path = Path.of(uploadDir, new File(filePath).getName());
       Files.deleteIfExists(path);
     } catch (IOException e) {
       System.err.println("Error deleting file: " + filePath + " - " + e.getMessage());

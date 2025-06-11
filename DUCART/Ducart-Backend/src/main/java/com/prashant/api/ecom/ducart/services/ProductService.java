@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,7 +51,7 @@ public class ProductService {
       for (MultipartFile file : files) {
         if (file != null && !file.isEmpty()) {
           String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-          Path filePath = Paths.get(uploadDir, fileName);
+          Path filePath = Path.of(uploadDir, fileName);
           Files.createDirectories(filePath.getParent());
           Files.write(filePath, file.getBytes());
           filePaths.add("/uploads/products/" + fileName);
@@ -100,7 +99,7 @@ public class ProductService {
 
   private void deleteFile(String filePath) {
     try {
-      Path path = Paths.get(uploadDir, new File(filePath).getName());
+      Path path = Path.of(uploadDir, new File(filePath).getName());
       Files.deleteIfExists(path);
     } catch (Exception e) {
       System.err.println("Error deleting file:" + filePath + "-" + e.getMessage());
